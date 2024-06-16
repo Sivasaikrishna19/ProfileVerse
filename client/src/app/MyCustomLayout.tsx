@@ -45,10 +45,10 @@ export default function MyCustomLayout({
         breakpoint="lg"
         collapsedWidth="0"
         onBreakpoint={(broken: any) => {
-          console.log(broken);
+          //   console.log(broken);
         }}
         onCollapse={(collapsed: any, type: any) => {
-          console.log(collapsed, type);
+          //   console.log(collapsed, type);
         }}
       >
         <div className="flex items-center justify-center py-4 text-[24px]">
