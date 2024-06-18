@@ -22,7 +22,7 @@ export default function MyCustomLayout({
     {
       key: "1",
       icon: <GithubOutlined />,
-      label: <Link href="/github">Github</Link>,
+      label: <Link href="/github">GitInsight</Link>,
     },
     {
       key: "2",
@@ -35,9 +35,6 @@ export default function MyCustomLayout({
   } = theme.useToken();
   const pathname = usePathname();
   const selectedKey = useSelectedKey();
-  useEffect(() => {
-    console.log(pathname, "params");
-  }, [pathname]);
 
   return (
     <Layout style={{ width: "100vw", height: "100vh" }}>
