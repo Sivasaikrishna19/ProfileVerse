@@ -5,8 +5,11 @@ import { Button, Input } from "antd";
 import Search from "antd/es/input/Search";
 import { fetchUserData } from "@/utils/api";
 import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
+import { useDispatch } from "react-redux";
+import { setProfileSummary } from "@/store/slices/profileSummary";
 
 const page = () => {
+  const dispatch = useDispatch();
   const [accessToken, setAccessToken] = useState<string>("");
   const [isGuest, setIsGuest] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>();
@@ -30,6 +33,7 @@ const page = () => {
         tempUserData = await fetchUserData(username!);
       }
     }
+    dispatch(setProfileSummary(tempUserData));
     setUserData(tempUserData);
 
     // setUsername(null);

@@ -1,8 +1,18 @@
+"use client";
+import { UserState } from "@/store/slices/profileSummary";
 import { AntDesignOutlined } from "@ant-design/icons";
 import { Avatar } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const ProfileSummary = () => {
+  const profileSummary = useSelector(
+    (state: UserState) => state.profileSummary
+  );
+
+  useEffect(() => {
+    console.log(profileSummary, "profile summary");
+  }, [profileSummary]);
   return (
     <div className="bg-[#e0e0e0] p-4 rounded-md shadow-mg mt-4">
       <div className="flex">

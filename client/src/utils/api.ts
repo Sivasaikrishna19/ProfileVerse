@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 export const fetchUserData = async (username:string, token:string|null = null, params = {}) => {
+    
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
   try {
     const response = await axios.get('https://api.github.com/users/'+username, {
