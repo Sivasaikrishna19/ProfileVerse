@@ -4,11 +4,13 @@ import Cookies from "js-cookie";
 import { Button, Input } from "antd";
 import Search from "antd/es/input/Search";
 import { fetchUserData } from "@/utils/api";
+import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
 
 const page = () => {
   const [accessToken, setAccessToken] = useState<string>("");
   const [isGuest, setIsGuest] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>();
+  const [userData, setUserData] = useState<any>();
 
   const handleGuestLogin = () => {
     setIsGuest(true);
@@ -20,20 +22,22 @@ const page = () => {
   }, []);
 
   const onSearch = async () => {
-    let userData;
+    let tempUserData;
     if (username) {
       if (accessToken) {
-        userData = await fetchUserData(username!, accessToken);
-        console.log("res data:", userData);
+        tempUserData = await fetchUserData(username!, accessToken);
       } else {
-        userData = await fetchUserData(username!);
+        tempUserData = await fetchUserData(username!);
       }
     }
+    setUserData(tempUserData);
 
-    console.log(userData, "user data");
-
-    setUsername(null);
+    // setUsername(null);
   };
+
+  useEffect(() => {
+    console.log(userData, "user data");
+  }, [userData]);
 
   return (
     <div>
@@ -58,6 +62,7 @@ const page = () => {
               setUsername(e.target.value);
             }}
           />
+          {userData ? <ProfileSummary /> : ""}
         </div>
       ) : (
         <div className="w-[80%] m-auto flex justify-center">
