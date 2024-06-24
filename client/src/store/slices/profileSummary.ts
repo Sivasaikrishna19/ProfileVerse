@@ -1,9 +1,10 @@
 // src/store/slices/userSlice.ts
-import { IProfileSummary } from '@/interfaces/profileSummary';
+import { IProfileSummary } from '@/interfaces/profileSummary.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
   profileSummary: IProfileSummary;
+  repos: Array<IRepository>;
 }
 
 const initialState: UserState = {
@@ -53,6 +54,7 @@ const initialState: UserState = {
       private_repos: 0,
     },
   },
+  repos:[]
 };
 
 const profileSummarySlice = createSlice({
@@ -62,9 +64,12 @@ const profileSummarySlice = createSlice({
     setProfileSummary(state, action: PayloadAction<IProfileSummary>) {
       state.profileSummary = action.payload;
     },
+    setRepositories(state,action: PayloadAction<Array<IRepository>>){
+      state.repos = action.payload;
+    }
 
   },
 });
 
-export const { setProfileSummary} = profileSummarySlice.actions;
+export const { setProfileSummary,setRepositories} = profileSummarySlice.actions;
 export default profileSummarySlice.reducer;

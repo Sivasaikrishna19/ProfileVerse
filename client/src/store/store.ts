@@ -1,10 +1,12 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import profileSummaryReducer from './slices/profileSummary';
+import authentication from './slices/authentication';
 
 const store = configureStore({
   reducer: {
     profileSummary: profileSummaryReducer,
+    authentication:authentication,
   },
 });
 
