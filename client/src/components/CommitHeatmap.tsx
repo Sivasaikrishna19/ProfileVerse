@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import {
-  fetchCommitActivity,
-  fetchRepositories,
-  getTopRepositories,
-} from "../utils/api";
+import { fetchCommitActivity, getTopRepositories } from "../utils/api";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { UserState } from "@/store/slices/profileSummary";
 
 const CommitHeatmap = () => {
+  useEffect(() => {
+    console.log("render check!");
+  }, []);
   const [commitActivity, setCommitActivity] = useState<any[]>([]);
   const { repos }: any = useSelector(
     (state: UserState) => state.profileSummary
@@ -18,9 +17,7 @@ const CommitHeatmap = () => {
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
-  //   const access_token: string | null = useSelector(
-  //     (state: AuthenticationState) => state.accessToken
-  //   );
+
   const access_token: string | undefined = Cookies.get("access_token");
 
   const convertCommitActivity = (commitActivity: any[]) => {
@@ -51,41 +48,33 @@ const CommitHeatmap = () => {
       count,
     }));
   };
+  const fetchData = async () => {
+    try {
+      const topRepos = getTopRepositories([...repos]);
+
+      const allCommitActivities = await Promise.all(
+        topRepos.map(async (repo: IRepository) => {
+          const commitActivity = await fetchCommitActivity(
+            profileSummary.login,
+            repo.name,
+            access_token
+          );
+
+          return Array.isArray(commitActivity) ? commitActivity : [];
+        })
+      );
+
+      const tempCommitActivity = allCommitActivities.flat();
+
+      const tempActivity = convertCommitActivity(tempCommitActivity);
+      setCommitActivity(tempActivity);
+    } catch (error) {
+      console.error("Error fetching commit activity:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const topRepos = getTopRepositories([...repos]);
-
-        console.log(topRepos, "repos");
-
-        const allCommitActivities = await Promise.all(
-          topRepos.map(async (repo: IRepository) => {
-            const commitActivity = await fetchCommitActivity(
-              profileSummary.login,
-              repo.name,
-              access_token
-            );
-            console.log(
-              commitActivity,
-              "commit activity-1",
-              typeof commitActivity
-            );
-            return Array.isArray(commitActivity) ? commitActivity : [];
-          })
-        );
-
-        // Flatten and aggregate all commit activities
-        const tempCommitActivity = allCommitActivities.flat();
-
-        const tempActivity = convertCommitActivity(tempCommitActivity);
-        console.log(tempActivity, "final");
-        setCommitActivity(tempActivity);
-      } catch (error) {
-        console.error("Error fetching commit activity:", error);
-      }
-    };
-
     if (profileSummary.login && access_token) {
+      //   console.log("fetching data!");
       fetchData();
     }
   }, [profileSummary.login, access_token]);

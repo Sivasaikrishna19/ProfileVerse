@@ -93,9 +93,10 @@ export const aggregateLanguages = async (repos:Array<IRepository> ,username: str
 export const fetchCommitActivity = async (username: string, repo: string, token: string | null = null) => {
   const headers = getHeaders(token);
     try {
-        const response = await axios.get(`https://api.github.com/repos/${username}/${repo}/stats/commit_activity`, {
+        const response = await axios.get(`${GITHUB_API_URL}/repos/${username}/${repo}/stats/commit_activity`, {
             headers,
         });
+        console.log("response data commit activity: ",response.data)
         return response.data;
     } catch (error) {
         console.error('API call error:', error);

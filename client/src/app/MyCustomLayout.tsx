@@ -1,15 +1,11 @@
-// src/app/MyCustomLayout.tsx
 "use client";
-import { useRouter } from "next/router";
 import { GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import useSelectedKey from "@/hooks/useSelectedKey";
-
-// import { useRouter } from 'next/router';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -33,11 +29,10 @@ export default function MyCustomLayout({
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const pathname = usePathname();
   const selectedKey = useSelectedKey();
 
   return (
-    <Layout style={{ width: "100vw", height: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
@@ -59,13 +54,14 @@ export default function MyCustomLayout({
         />
       </Sider>
       <Layout>
-        <Content style={{ margin: "24px 16px 0" }}>
+        <Content style={{ margin: "24px 16px 0", overflow: "auto" }}>
           <div
             style={{
               padding: 24,
-              height: "100%",
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
+              minHeight: "calc(100vh - 88px)", // Adjust the height to ensure footer visibility
+              overflow: "auto",
             }}
           >
             {children}

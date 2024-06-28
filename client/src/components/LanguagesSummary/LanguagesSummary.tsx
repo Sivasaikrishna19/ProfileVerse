@@ -1,21 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PieChart from "../PieChart";
 import CommitHeatmap from "../CommitHeatmap";
-import { useSelector } from "react-redux";
-import { UserState } from "@/store/slices/profileSummary";
-import { aggregateLanguages } from "@/utils/api";
-import Cookies from "js-cookie";
-import { LanguageStats } from "@/interfaces/language.interface";
 
 const LanguagesSummary = ({ languages }: any) => {
+  useEffect(() => {
+    console.log("parent component!!", languages);
+  }, []);
   return (
-    <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 flex items-center">
-      <div className="flex-1 flex flex-col items-center">
-        <PieChart languages={languages} />
+    <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 flex items-center overflow-y-auto">
+      <div className="flex flex-col items-center w-full">
+        <PieChart data={languages} />
         <div className="text-semibold">Language Proficiency Overview</div>
       </div>
-      <div className="flex-1">
+      <div className="w-full">
         <CommitHeatmap />
       </div>
     </div>
