@@ -2,6 +2,7 @@
 import { GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import React from "react";
+import "antd/dist/reset.css";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
