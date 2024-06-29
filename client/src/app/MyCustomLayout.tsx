@@ -43,7 +43,7 @@ export default function MyCustomLayout({
           //   console.log(collapsed, type);
         }}
       >
-        <div className="flex items-center justify-center py-4 text-[24px]">
+        <div className="flex items-center justify-center py-4 text-[24px] text-white ">
           ProfileVerse
         </div>
         <Menu
