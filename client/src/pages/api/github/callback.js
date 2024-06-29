@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
   }
-
+console.log('point 2')
   try {
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
