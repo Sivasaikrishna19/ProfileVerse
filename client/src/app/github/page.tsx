@@ -63,6 +63,16 @@ const Page = () => {
     }
   }, [dispatch, token, username]);
 
+  const client_id = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+  console.log("env: ", process.env.NODE_ENV);
+  const redirect_uri =
+    process.env.NODE_ENV === "production"
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
+      : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
+
+  const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user,repo`;
+  console.log("GITHUB_CLIENT_ID:", process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID);
+  console.log("DEV_URL:", process.env.NEXT_PUBLIC_DEV_URL);
   return (
     <div>
       <div className="flex items-center justify-center w-full text-[24px] mb-6">
@@ -93,10 +103,7 @@ const Page = () => {
           <Button
             type="primary"
             className="w-full mr-1"
-            onClick={() =>
-              (window.location.href =
-                "https://github.com/login/oauth/authorize?client_id=Ov23li3wlt1XywFULHLj&redirect_uri=http://localhost:3000/api/github/callback&scope=user,repo")
-            }
+            onClick={() => (window.location.href = oauthUrl)}
           >
             Authorize with GitHub
           </Button>
