@@ -93,10 +93,10 @@ const Page = () => {
           <Button
             type="primary"
             className="w-full mr-1"
-            // onClick={() =>
-            //   (window.location.href =
-            //     "https://github.com/login/oauth/authorize?client_id=Ov23li3wlt1XywFULHLj&redirect_uri=http://localhost:3000/api/github/callback&scope=user,repo")
-            // }
+            onClick={() =>
+              (window.location.href =
+                "https://github.com/login/oauth/authorize?client_id=Ov23li3wlt1XywFULHLj&redirect_uri=http://localhost:3000/api/github/callback&scope=user,repo")
+            }
           >
             Authorize with GitHub
           </Button>
