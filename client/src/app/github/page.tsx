@@ -75,7 +75,7 @@ const Page = () => {
             placeholder="Search for profile..."
             allowClear
             enterButton="Search"
-            value={username}
+            value={username!}
             size="large"
             className="w-full"
             onSearch={onSearch}

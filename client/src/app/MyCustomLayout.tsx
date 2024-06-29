@@ -5,7 +5,6 @@ import React from "react";
 import "antd/dist/reset.css";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import useSelectedKey from "@/hooks/useSelectedKey";
 
 const { Content, Footer, Sider } = Layout;
@@ -51,7 +50,7 @@ export default function MyCustomLayout({
           theme="dark"
           mode="inline"
           items={items}
-          selectedKeys={[selectedKey]}
+          selectedKeys={[selectedKey!]}
         />
       </Sider>
       <Layout>
