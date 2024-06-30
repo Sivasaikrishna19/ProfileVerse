@@ -2,12 +2,13 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
+  console.log('point 2')
   const { code } = req.query;
 
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
   }
-console.log('point 2')
+
   try {
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
@@ -31,7 +32,7 @@ console.log('point 2')
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);
       res.redirect('/github');
     } else {
-      res.status(400).json({ error: 'Failed to obtain access token' });
+      res.status(400).json({ error: 'Failed to obtain access token!' });
     }
   } catch (error) {
     console.error(error);
