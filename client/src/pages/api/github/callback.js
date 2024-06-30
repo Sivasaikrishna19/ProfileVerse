@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const redirect_uri =
     process.env.NODE_ENV === 'production'
-      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}`
       : `${process.env.NEXT_PUBLIC_DEV_URL}`;
 
   const client_id =
