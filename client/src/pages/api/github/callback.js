@@ -1,25 +1,32 @@
-// src/pages/api/github/callback.js
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  console.log('point 2')
+  console.log('point 2');
   const { code } = req.query;
 
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
   }
+
   const redirect_uri =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === 'production'
       ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
       : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
+
+  const client_id = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+  const client_secret =
+    process.env.NODE_ENV === 'production'
+      ? process.env.GITHUB_CLIENT_SECRET_PROD
+      : process.env.GITHUB_CLIENT_SECRET_DEV;
+
   try {
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {
-        client_id:process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        client_id,
+        client_secret,
         code,
-        redirect_uri: redirect_uri ,
+        redirect_uri,
       },
       {
         headers: {
@@ -29,7 +36,7 @@ export default async function handler(req, res) {
     );
 
     const { access_token } = response.data;
-    console.log("Access token", access_token)
+    console.log('Access token', access_token);
 
     if (access_token) {
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);
