@@ -63,17 +63,18 @@ const Page = () => {
     }
   }, [dispatch, token]);
 
-  const client_id = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-  console.log("env: ", process.env.NODE_ENV);
+  const client_id =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_PROD
+      : process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_DEV;
+
   const redirect_uri =
     process.env.NODE_ENV === "production"
-      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
-      : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}`
+      : `${process.env.NEXT_PUBLIC_DEV_URL}`;
 
   const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user,repo`;
-  console.log("GITHUB_CLIENT_ID:", process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID);
-  console.log("DEV_URL:", process.env.NEXT_PUBLIC_DEV_URL);
-  console.log("PROD URL:", process.env.NEXT_PUBLIC_PROD_URL);
+
   return (
     <div>
       <div className="flex items-center justify-center w-full text-[24px] mb-6">
