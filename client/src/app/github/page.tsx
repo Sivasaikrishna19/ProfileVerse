@@ -78,6 +78,11 @@ const Page = () => {
 
   const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user,repo`;
 
+  console.log(
+    process.env.NODE_ENV + " :",
+    process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_PROD
+  );
+
   return (
     <div>
       <div className="flex items-center justify-center w-full text-[24px] mb-6">
