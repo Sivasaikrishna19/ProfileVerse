@@ -73,7 +73,6 @@ const Page = () => {
       dispatch(setRepositories([]));
       setUserData(null);
     }
-    console.log("user name: ", username);
   }, [username]);
 
   const client_id =
