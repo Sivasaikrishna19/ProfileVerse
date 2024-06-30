@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       {
         client_id: 'Ov23li3wlt1XywFULHLj',
         client_secret: 'b418f36eaa54c851bf54d2cfd70758feeb3f83c3',
-        code,
+        code:"bfd341e62909590c96fe",
         redirect_uri: 'http://localhost:3000/api/github/callback',
       },
       {
