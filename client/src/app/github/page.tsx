@@ -16,6 +16,7 @@ import {
 } from "@/store/slices/profileSummary";
 import LanguagesSummary from "@/components/LanguagesSummary/LanguagesSummary";
 import { setAccessToken } from "@/store/slices/authentication";
+import { IProfileSummary } from "@/interfaces/profileSummary.interface";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,10 @@ const Page = () => {
   }, [dispatch]);
 
   const onSearch = async () => {
+    if (username == "" || !username) {
+      dispatch(setProfileSummary({} as IProfileSummary));
+      dispatch(setRepositories([]));
+    }
     setLoading(true);
     let tempUserData;
     let tempRepos;
@@ -62,6 +67,15 @@ const Page = () => {
     }
   };
 
+  useEffect(() => {
+    if (username == "" || !username) {
+      dispatch(setProfileSummary({} as IProfileSummary));
+      dispatch(setRepositories([]));
+      setUserData(null);
+    }
+    console.log("user name: ", username);
+  }, [username]);
+
   const client_id =
     process.env.NODE_ENV === "production"
       ? process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_PROD
@@ -84,7 +98,7 @@ const Page = () => {
         <div className="w-full">
           <Search
             placeholder="Search for profile..."
-            allowClear
+            // allowClear
             enterButton="Search"
             value={username!}
             size="large"

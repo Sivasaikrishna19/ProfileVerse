@@ -25,7 +25,7 @@ const CommitHeatmap = () => {
           profileSummary.login,
           accessToken!
         );
-        console.log("repos: ", repositories);
+
         const commitActivities = repositories.user.repositories.edges.flatMap(
           (repo: any) =>
             repo.node.defaultBranchRef.target.history.edges.map(
@@ -55,14 +55,12 @@ const CommitHeatmap = () => {
             count,
           })
         );
-        console.log("Heatmap data:", heatmapData);
+
         setCommitActivity(heatmapData);
       } catch (error) {
         console.error("Error fetching commit activities:", error);
       }
     };
-
-    console.log("point", profileSummary.login, accessToken);
 
     if (profileSummary.login && accessToken) {
       fetchData();
