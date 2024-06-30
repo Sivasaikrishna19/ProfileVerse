@@ -26,10 +26,6 @@ const Page = () => {
   const [languages, setLanguages] = useState<any>({ Type: 10000 });
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log("page 1");
-  }, []);
-
   const handleGuestLogin = useCallback(() => {
     setIsGuest(true);
   }, []);
@@ -77,11 +73,6 @@ const Page = () => {
       : `${process.env.NEXT_PUBLIC_DEV_URL}`;
 
   const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user,repo`;
-
-  console.log(
-    process.env.NODE_ENV + " :",
-    process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_PROD
-  );
 
   return (
     <div>

@@ -7,9 +7,6 @@ import Cookies from "js-cookie";
 import { UserState } from "@/store/slices/profileSummary";
 
 const CommitHeatmap = () => {
-  useEffect(() => {
-    console.log("render check!");
-  }, []);
   const [commitActivity, setCommitActivity] = useState<any[]>([]);
   const { repos }: any = useSelector(
     (state: UserState) => state.profileSummary
@@ -74,7 +71,6 @@ const CommitHeatmap = () => {
   };
   useEffect(() => {
     if (profileSummary.login && access_token) {
-      //   console.log("fetching data!");
       fetchData();
     }
   }, [profileSummary.login, access_token]);

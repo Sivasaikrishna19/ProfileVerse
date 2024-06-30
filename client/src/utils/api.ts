@@ -96,7 +96,7 @@ export const fetchCommitActivity = async (username: string, repo: string, token:
         const response = await axios.get(`${GITHUB_API_URL}/repos/${username}/${repo}/stats/commit_activity`, {
             headers,
         });
-        console.log("response data commit activity: ",response.data)
+
         return response.data;
     } catch (error) {
         console.error('API call error:', error);

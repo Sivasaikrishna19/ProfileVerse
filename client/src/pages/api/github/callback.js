@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     );
 
     const { access_token } = response.data;
-    console.log('Access token', access_token);
+
 
     if (access_token) {
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);

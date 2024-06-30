@@ -33,16 +33,7 @@ export default function MyCustomLayout({
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken: any) => {
-          //   console.log(broken);
-        }}
-        onCollapse={(collapsed: any, type: any) => {
-          //   console.log(collapsed, type);
-        }}
-      >
+      <Sider breakpoint="lg" collapsedWidth="0">
         <div className="flex items-center justify-center py-4 text-[24px] text-white ">
           ProfileVerse
         </div>

@@ -4,9 +4,6 @@ import PieChart from "../PieChart";
 import CommitHeatmap from "../CommitHeatmap";
 
 const LanguagesSummary = ({ languages }: any) => {
-  useEffect(() => {
-    console.log("parent component!!", languages);
-  }, []);
   return (
     <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 flex items-center overflow-y-auto">
       <div className="flex flex-col items-center w-full">
