@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import Search from "antd/es/input/Search";
 import {
   aggregateLanguages,
@@ -24,6 +24,7 @@ const Page = () => {
   const [username, setUsername] = useState<string | null>("");
   const [userData, setUserData] = useState<any>();
   const [languages, setLanguages] = useState<any>({ Type: 10000 });
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("page 1");
@@ -41,7 +42,8 @@ const Page = () => {
     }
   }, [dispatch]);
 
-  const onSearch = useCallback(async () => {
+  const onSearch = async () => {
+    setLoading(true);
     let tempUserData;
     let tempRepos;
     if (username) {
@@ -60,8 +62,9 @@ const Page = () => {
       }
       dispatch(setProfileSummary(tempUserData));
       setUserData(tempUserData);
+      setLoading(false);
     }
-  }, [dispatch, token]);
+  };
 
   const client_id =
     process.env.NODE_ENV === "production"
@@ -93,11 +96,17 @@ const Page = () => {
             onSearch={onSearch}
             onChange={(e: any) => setUsername(e.target.value)}
           />
-          {userData && (
-            <>
-              <ProfileSummary />
-              <LanguagesSummary languages={languages} />
-            </>
+          {loading ? (
+            <div className="w-full flex justify-center mt-6">
+              <Spin tip="Loading..." size="large" />
+            </div>
+          ) : (
+            userData && (
+              <>
+                <ProfileSummary />
+                <LanguagesSummary languages={languages} />
+              </>
+            )
           )}
         </div>
       ) : (
