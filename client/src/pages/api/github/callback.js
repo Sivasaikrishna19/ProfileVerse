@@ -8,15 +8,18 @@ export default async function handler(req, res) {
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
   }
-
+  const redirect_uri =
+    process.env.NODE_ENV === "production"
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
+      : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
   try {
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {
-        client_id: 'Ov23li3wlt1XywFULHLj',
-        client_secret: 'b418f36eaa54c851bf54d2cfd70758feeb3f83c3',
-        code:"bfd341e62909590c96fe",
-        redirect_uri: 'http://localhost:3000/api/github/callback',
+        client_id:process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri: redirect_uri ,
       },
       {
         headers: {
