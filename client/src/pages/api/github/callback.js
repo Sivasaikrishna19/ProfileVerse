@@ -44,7 +44,10 @@ export default async function handler(req, res) {
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);
       res.redirect('/github');
     } else {
-      res.status(400).json({ error: 'Failed to obtain access token!' });
+      res.status(400).json({ error: 'Failed to obtain access token!' ,data:{
+        redirect_uri:redirect_uri,
+        client_id:client_id
+      }});
     }
   } catch (error) {
     console.error(error);
