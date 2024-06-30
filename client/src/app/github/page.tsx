@@ -61,7 +61,7 @@ const Page = () => {
       dispatch(setProfileSummary(tempUserData));
       setUserData(tempUserData);
     }
-  }, [dispatch, token, username]);
+  }, [dispatch, token]);
 
   const client_id = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
   console.log("env: ", process.env.NODE_ENV);
