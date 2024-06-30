@@ -1,86 +1,80 @@
+// src/components/CommitHeatmap.tsx
 import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { fetchCommitActivity, getTopRepositories } from "../utils/api";
+
 import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import { UserState } from "@/store/slices/profileSummary";
+import { AuthenticationState } from "@/store/slices/authentication";
+import { fetchUserRepositories } from "@/graphql/queries/repository";
+import Cookies from "js-cookie";
 
 const CommitHeatmap = () => {
-  const [commitActivity, setCommitActivity] = useState<any[]>([]);
-  const { repos }: any = useSelector(
-    (state: UserState) => state.profileSummary
-  );
+  const [commitActivity, setCommitActivity] = useState<
+    { date: string; count: number }[]
+  >([]);
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
+  const accessToken: string | undefined = Cookies.get("access_token");
 
-  const access_token: string | undefined = Cookies.get("access_token");
-
-  const convertCommitActivity = (commitActivity: any[]) => {
-    const aggregatedData = commitActivity
-      .flatMap((week: any) => {
-        const weekStartDate = new Date(week.week * 1000);
-        return week.days.map((count: number, index: number) => {
-          const dayDate = new Date(weekStartDate);
-          dayDate.setDate(weekStartDate.getDate() + index);
-          const formattedDate = dayDate.toISOString().split("T")[0];
-          return {
-            date: formattedDate,
-            count,
-          };
-        });
-      })
-      .reduce((acc: { [key: string]: number }, { date, count }) => {
-        if (acc[date]) {
-          acc[date] += count;
-        } else {
-          acc[date] = count;
-        }
-        return acc;
-      }, {});
-
-    return Object.entries(aggregatedData).map(([date, count]) => ({
-      date,
-      count,
-    }));
-  };
-  const fetchData = async () => {
-    try {
-      const topRepos = getTopRepositories([...repos]);
-
-      const allCommitActivities = await Promise.all(
-        topRepos.map(async (repo: IRepository) => {
-          const commitActivity = await fetchCommitActivity(
-            profileSummary.login,
-            repo.name,
-            access_token
-          );
-
-          return Array.isArray(commitActivity) ? commitActivity : [];
-        })
-      );
-
-      const tempCommitActivity = allCommitActivities.flat();
-
-      const tempActivity = convertCommitActivity(tempCommitActivity);
-      setCommitActivity(tempActivity);
-    } catch (error) {
-      console.error("Error fetching commit activity:", error);
-    }
-  };
   useEffect(() => {
-    if (profileSummary.login && access_token) {
+    const fetchData = async () => {
+      try {
+        const repositories = await fetchUserRepositories(
+          profileSummary.login,
+          accessToken!
+        );
+        console.log("repos: ", repositories);
+        const commitActivities = repositories.user.repositories.edges.flatMap(
+          (repo: any) =>
+            repo.node.defaultBranchRef.target.history.edges.map(
+              (commit: any) => ({
+                date: commit.node.committedDate.split("T")[0],
+                count: 1 as number, // Explicitly type count as number
+              })
+            )
+        );
+
+        const aggregatedData = commitActivities.reduce(
+          (
+            acc: { [date: string]: number },
+            { date, count }: { date: string; count: number }
+          ) => {
+            if (date) {
+              acc[date] = (acc[date] || 0) + count;
+            }
+            return acc;
+          },
+          {}
+        );
+
+        const heatmapData: any = Object.entries(aggregatedData).map(
+          ([date, count]) => ({
+            date,
+            count,
+          })
+        );
+        console.log("Heatmap data:", heatmapData);
+        setCommitActivity(heatmapData);
+      } catch (error) {
+        console.error("Error fetching commit activities:", error);
+      }
+    };
+
+    console.log("point", profileSummary.login, accessToken);
+
+    if (profileSummary.login && accessToken) {
       fetchData();
     }
-  }, [profileSummary.login, access_token]);
+  }, [profileSummary.login, accessToken]);
 
   return (
     <div>
       <h2>Commit Activity</h2>
       <CalendarHeatmap
-        startDate={new Date("2023-08-01")}
-        endDate={new Date("2024-7-31")}
+        startDate={new Date("2023-07-01")}
+        endDate={new Date("2024-07-31")}
         values={commitActivity}
         classForValue={(value) => {
           if (!value) {
