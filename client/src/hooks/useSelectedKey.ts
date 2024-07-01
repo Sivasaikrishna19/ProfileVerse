@@ -10,7 +10,7 @@ const useSelectedKey = () => {
 
   useEffect(() => {
     if (pathname) {
-      const matchedRoute = routes.find((route) => pathname.startsWith(route.route));
+      const matchedRoute = routes.find((route) => pathname === route.route);
       if (matchedRoute) {
         setSelectedKey(matchedRoute.key);
       }

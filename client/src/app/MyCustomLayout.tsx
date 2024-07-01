@@ -5,6 +5,7 @@ import React from "react";
 import "antd/dist/reset.css";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import useSelectedKey from "@/hooks/useSelectedKey";
 
 const { Content, Footer, Sider } = Layout;
@@ -14,6 +15,11 @@ export default function MyCustomLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
+  const navigateToPage = (path: string) => {
+    router.push(path);
+  };
   const items = [
     {
       key: "1",
@@ -34,7 +40,12 @@ export default function MyCustomLayout({
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider breakpoint="lg" collapsedWidth="0">
-        <div className="flex items-center justify-center py-4 text-[24px] text-white ">
+        <div
+          className="flex items-center justify-center py-4 text-[24px] text-white cursor-pointer"
+          onClick={() => {
+            navigateToPage("/");
+          }}
+        >
           ProfileVerse
         </div>
         <Menu

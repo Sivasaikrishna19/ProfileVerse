@@ -1,5 +1,9 @@
 export const routes = [
   {
+    key: "0",
+    route: "/",
+  },
+  {
     key: "1",
     route: "/github",
   },
