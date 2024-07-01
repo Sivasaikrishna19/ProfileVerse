@@ -15,6 +15,7 @@ import { setAccessToken } from "@/store/slices/authentication";
 import { IProfileSummary } from "@/interfaces/profileSummary.interface";
 import { fetchUserLanguages } from "@/graphql/queries/languages";
 import { IRepository } from "@/interfaces/repo.interface";
+import CommitHeatmap from "@/components/CommitHeatmap";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -136,6 +137,7 @@ const Page = () => {
             userData?.login && (
               <>
                 <ProfileSummary />
+                <CommitHeatmap />
                 <LanguagesSummary languages={languages} />
               </>
             )

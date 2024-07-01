@@ -66,8 +66,10 @@ const CommitHeatmap = () => {
   }, [profileSummary.login, accessToken]);
 
   return (
-    <div>
-      <h2>Commit Activity</h2>
+    <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 overflow-y-auto">
+      <div className="text-semibold text-[18px] text-center mb-2">
+        Commit History
+      </div>
       <CalendarHeatmap
         startDate={new Date("2023-07-01")}
         endDate={new Date("2024-07-31")}
