@@ -23,22 +23,26 @@ const CommitHeatmap = () => {
           profileSummary.login,
           accessToken!
         );
-
         const commitActivities = commitHistory.user.repositories.edges.flatMap(
-          (repo: any) =>
-            repo.node.defaultBranchRef.target.history.edges.map(
-              (commit: any) => ({
-                date: commit.node.committedDate.split("T")[0],
-                count: 1 as number,
-              })
-            )
+          (repo: any) => {
+            if (
+              repo.node.defaultBranchRef &&
+              repo.node.defaultBranchRef.target &&
+              repo.node.defaultBranchRef.target.history
+            ) {
+              return repo.node.defaultBranchRef.target.history.edges.map(
+                (commit: any) => ({
+                  date: commit.node.committedDate.split("T")[0],
+                  count: 1,
+                })
+              );
+            }
+            return [];
+          }
         );
 
         const aggregatedData = commitActivities.reduce(
-          (
-            acc: { [date: string]: number },
-            { date, count }: { date: string; count: number }
-          ) => {
+          (acc: { [date: string]: number }, { date, count }: any) => {
             if (date) {
               acc[date] = (acc[date] || 0) + count;
             }

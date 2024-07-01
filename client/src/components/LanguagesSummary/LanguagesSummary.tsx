@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import PieChart from "../PieChart";
-import CommitHeatmap from "../CommitHeatmap";
 
 const LanguagesSummary = ({ languages }: any) => {
   return (

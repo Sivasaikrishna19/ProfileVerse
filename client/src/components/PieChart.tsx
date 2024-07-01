@@ -8,8 +8,45 @@ interface PieChartProps {
   data: { language: string; bytes: number }[];
 }
 
+const predefinedColors = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#4BC0C0",
+  "#9966FF",
+  "#FF9F40",
+  "#C9CBCF",
+  "#FF99C8",
+  "#FFCC99",
+  "#A6D8FF",
+  "#B2BEB5",
+  "#FFD700",
+  "#ADFF2F",
+  "#FF6347",
+  "#40E0D0",
+  "#EE82EE",
+  "#FA8072",
+  "#FF4500",
+  "#DA70D6",
+  "#BDB76B",
+  "#7B68EE",
+  "#6B8E23",
+  "#4682B4",
+  "#D2691E",
+  "#9ACD32",
+  "#00CED1",
+  "#8A2BE2",
+  "#FF00FF",
+  "#1E90FF",
+  "#FF1493",
+];
+
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
   const totalBytes = data.reduce((sum, item) => sum + item.bytes, 0);
+
+  const getColor = (index: number) => {
+    return predefinedColors[index % predefinedColors.length];
+  };
 
   const chartData = {
     labels: data.map((item) => `${item.language}`),
@@ -17,24 +54,8 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
       {
         label: "Languages",
         data: data.map((item) => item.bytes),
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-          "#FF6384",
-        ],
-        hoverBackgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-          "#FF6384",
-        ],
+        backgroundColor: data.map((_, index) => getColor(index)),
+        hoverBackgroundColor: data.map((_, index) => getColor(index)),
       },
     ],
   };
@@ -69,6 +90,15 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
                 rotation: 0,
               };
             });
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            const value = tooltipItem.raw;
+            const percentage = ((value / totalBytes) * 100).toFixed(1);
+            return `${percentage}%`;
           },
         },
       },
