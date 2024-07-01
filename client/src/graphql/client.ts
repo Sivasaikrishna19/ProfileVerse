@@ -18,7 +18,7 @@ export const graphqlClient = async (query: string, variables: any, token: string
       },
       { headers }
     );
-    console.log(response.data.data,"data")
+
     return response.data.data;
   } catch (error) {
     console.error('Error making GraphQL request:', error);

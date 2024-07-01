@@ -1,18 +1,18 @@
 "use client";
 
 import { UserState } from "@/store/slices/profileSummary";
-import { Avatar } from "antd";
+import { Avatar, Statistic, StatisticProps } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import CountUp from "react-countup";
 
 const ProfileSummary = () => {
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
-
-  useEffect(() => {
-    console.log(profileSummary, "profile summary");
-  }, [profileSummary]);
+  const formatter: StatisticProps["formatter"] = (value) => (
+    <CountUp end={value as number} separator="," />
+  );
 
   return (
     <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4">
@@ -32,21 +32,26 @@ const ProfileSummary = () => {
       <div className="mt-4 flex flex-col md:flex-row justify-between">
         <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
           <div className="text-[28px]">
-            {profileSummary.repositories?.totalCount}
+            <Statistic
+              title={<div className="text-[20px]">Repositories</div>}
+              value={profileSummary.repositories?.totalCount}
+              formatter={formatter}
+            />
           </div>
-          <div className="text-[20px]">Repositories</div>
         </div>
         <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
-          <div className="text-[28px]">
-            {profileSummary.followers?.totalCount}
-          </div>
-          <div className="text-[20px]">Followers</div>
+          <Statistic
+            title={<div className="text-[20px]">Followers</div>}
+            value={profileSummary.followers?.totalCount}
+            formatter={formatter}
+          />
         </div>
         <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center">
-          <div className="text-[28px]">
-            {profileSummary.following?.totalCount}
-          </div>
-          <div className="text-[20px]">Following</div>
+          <Statistic
+            title={<div className="text-[20px]">Following</div>}
+            value={profileSummary.following?.totalCount}
+            formatter={formatter}
+          />
         </div>
       </div>
     </div>

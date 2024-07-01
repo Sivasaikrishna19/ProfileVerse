@@ -13,7 +13,7 @@ export const fetchUserData = async (username:string,token:string) => {
 export const fetchRepositories = async (username:string,token:string) => {
   try {
     const repositories = await fetchAllRepositories(username, token);
-    console.log(repositories);
+
     return repositories;
   
   } catch (error) {

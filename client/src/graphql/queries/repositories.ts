@@ -1,7 +1,7 @@
 import { graphqlClient } from '../client';
 
 export const fetchAllRepositories = async (username: string, token: string) => {
-  const query = `
+    const query = `
     query($username: String!, $first: Int!, $after: String) {
       user(login: $username) {
         repositories(first: $first, after: $after) {
@@ -32,12 +32,15 @@ export const fetchAllRepositories = async (username: string, token: string) => {
                   size
                 }
               }
+              createdAt
+              updatedAt
             }
           }
         }
       }
     }
   `;
+  
 
   const variables = {
     username,
