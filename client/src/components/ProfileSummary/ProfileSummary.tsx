@@ -19,7 +19,6 @@ const ProfileSummary = () => {
       <div className="flex ml-2">
         <Avatar
           size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
-          //   icon={<AntDesignOutlined />}
           src={profileSummary?.avatarUrl}
         />
         <div className="flex flex-col justify-center ml-4">
@@ -30,20 +29,20 @@ const ProfileSummary = () => {
         </div>
       </div>
 
-      <div className="flex justify-between mt-4">
-        <div className="bg-white p-4 rounded-md w-full mx-2 text-center">
+      <div className="mt-4 flex flex-col md:flex-row justify-between">
+        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
           <div className="text-[28px]">
             {profileSummary.repositories?.totalCount}
           </div>
           <div className="text-[20px]">Repositories</div>
         </div>
-        <div className="bg-white p-4 rounded-md w-full mx-2 text-center">
+        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
           <div className="text-[28px]">
             {profileSummary.followers?.totalCount}
           </div>
           <div className="text-[20px]">Followers</div>
         </div>
-        <div className="bg-white p-4 rounded-md w-full mx-2 text-center">
+        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center">
           <div className="text-[28px]">
             {profileSummary.following?.totalCount}
           </div>

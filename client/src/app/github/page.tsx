@@ -113,7 +113,7 @@ const Page = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-center w-full text-[24px] mb-6">
+      <div className="flex items-center justify-center w-full text-[24px] mb-6 text-center">
         Welcome to GitInsight! Discover top talent through GitHub profiles with
         ease
       </div>
