@@ -17,6 +17,7 @@ import {
 import LanguagesSummary from "@/components/LanguagesSummary/LanguagesSummary";
 import { setAccessToken } from "@/store/slices/authentication";
 import { IProfileSummary } from "@/interfaces/profileSummary.interface";
+import { fetchUserLanguages } from "@/graphql/queries/languages";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,33 @@ const Page = () => {
       dispatch(setAccessToken(tempToken));
     }
   }, [dispatch]);
+  const significantLanguages = [
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Java",
+    "C++",
+    "C#",
+    "PHP",
+    "Ruby",
+    "Go",
+    "Rust",
+    "Kotlin",
+    "Swift",
+    "Objective-C",
+    "Scala",
+    "Haskell",
+    "Shell",
+    "HTML",
+    "CSS",
+    "Dart",
+    "Perl",
+    "Lua",
+    "Elixir",
+    "Clojure",
+    "R",
+    "MATLAB",
+  ];
 
   const onSearch = async () => {
     if (username == "" || !username) {
@@ -51,12 +79,13 @@ const Page = () => {
       if (token) {
         tempUserData = await fetchUserData(username, token);
         tempRepos = await fetchRepositories(username);
-        let tempLangStats: any = await aggregateLanguages(
-          tempRepos,
-          username,
-          token
+        const tempLangStats = await fetchUserLanguages(username, token);
+        const filteredLangStats = tempLangStats.filter((lang: any) =>
+          significantLanguages.includes(lang.language)
         );
-        setLanguages(tempLangStats);
+
+        setLanguages(filteredLangStats);
+
         dispatch(setRepositories(tempRepos));
       } else {
         tempUserData = await fetchUserData(username);
