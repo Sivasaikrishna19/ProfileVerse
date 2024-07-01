@@ -21,15 +21,10 @@ import Repositories from "@/components/Repositories/Repositories";
 const Page = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState<string | undefined>("");
-  const [isGuest, setIsGuest] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>("");
   const [userData, setUserData] = useState<IProfileSummary>();
   const [languages, setLanguages] = useState<any>({ Type: 10000 });
   const [loading, setLoading] = useState<boolean>(false);
-
-  const handleGuestLogin = useCallback(() => {
-    setIsGuest(true);
-  }, []);
 
   useEffect(() => {
     const tempToken: string | undefined = Cookies.get("access_token");
@@ -117,7 +112,7 @@ const Page = () => {
         Welcome to GitInsight! Discover top talent through GitHub profiles with
         ease
       </div>
-      {token || isGuest ? (
+      {token ? (
         <div className="w-full">
           <Search
             placeholder="Search for profile..."
@@ -148,13 +143,10 @@ const Page = () => {
         <div className="w-[80%] m-auto flex justify-center">
           <Button
             type="primary"
-            className="w-full mr-1"
+            className="w-full"
             onClick={() => (window.location.href = oauthUrl)}
           >
             Authorize with GitHub
-          </Button>
-          <Button onClick={handleGuestLogin} className="w-full ml-1">
-            Use as Guest
           </Button>
         </div>
       )}
