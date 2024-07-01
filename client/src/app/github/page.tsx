@@ -3,11 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button, Spin } from "antd";
 import Search from "antd/es/input/Search";
-import {
-  aggregateLanguages,
-  fetchRepositories,
-  fetchUserData,
-} from "@/utils/api";
+import { fetchRepositories, fetchUserData } from "@/utils/api";
 import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
 import { useDispatch } from "react-redux";
 import {
@@ -18,13 +14,14 @@ import LanguagesSummary from "@/components/LanguagesSummary/LanguagesSummary";
 import { setAccessToken } from "@/store/slices/authentication";
 import { IProfileSummary } from "@/interfaces/profileSummary.interface";
 import { fetchUserLanguages } from "@/graphql/queries/languages";
+import { IRepository } from "@/interfaces/repo.interface";
 
 const Page = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState<string | undefined>("");
   const [isGuest, setIsGuest] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>("");
-  const [userData, setUserData] = useState<any>();
+  const [userData, setUserData] = useState<IProfileSummary>();
   const [languages, setLanguages] = useState<any>({ Type: 10000 });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -73,25 +70,22 @@ const Page = () => {
       dispatch(setRepositories([]));
     }
     setLoading(true);
-    let tempUserData;
-    let tempRepos;
+    let tempUserData: IProfileSummary;
+    let tempRepos: IRepository[];
     if (username) {
       if (token) {
         tempUserData = await fetchUserData(username, token);
-        tempRepos = await fetchRepositories(username);
+        tempRepos = await fetchRepositories(username, token);
         const tempLangStats = await fetchUserLanguages(username, token);
         const filteredLangStats = tempLangStats.filter((lang: any) =>
           significantLanguages.includes(lang.language)
         );
-
         setLanguages(filteredLangStats);
-
         dispatch(setRepositories(tempRepos));
-      } else {
-        tempUserData = await fetchUserData(username);
+        dispatch(setProfileSummary(tempUserData));
+        setUserData(tempUserData);
       }
-      dispatch(setProfileSummary(tempUserData));
-      setUserData(tempUserData);
+
       setLoading(false);
     }
   };
@@ -100,7 +94,7 @@ const Page = () => {
     if (username == "" || !username) {
       dispatch(setProfileSummary({} as IProfileSummary));
       dispatch(setRepositories([]));
-      setUserData(null);
+      setUserData({} as IProfileSummary);
     }
   }, [username]);
 
@@ -139,7 +133,7 @@ const Page = () => {
               <Spin tip="Loading..." size="large" />
             </div>
           ) : (
-            userData && (
+            userData?.login && (
               <>
                 <ProfileSummary />
                 <LanguagesSummary languages={languages} />

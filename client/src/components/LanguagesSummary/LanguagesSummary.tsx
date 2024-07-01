@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import PieChart from "../PieChart";
 import CommitHeatmap from "../CommitHeatmap";
 

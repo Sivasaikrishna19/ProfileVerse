@@ -2,12 +2,10 @@
 import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
-import { AuthenticationState } from "@/store/slices/authentication";
-import { fetchUserRepositories } from "@/graphql/queries/repository";
 import Cookies from "js-cookie";
+import { fetchUserCommitHistory } from "@/graphql/queries/commitHistory";
 
 const CommitHeatmap = () => {
   const [commitActivity, setCommitActivity] = useState<
@@ -21,17 +19,17 @@ const CommitHeatmap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const repositories = await fetchUserRepositories(
+        const commitHistory = await fetchUserCommitHistory(
           profileSummary.login,
           accessToken!
         );
 
-        const commitActivities = repositories.user.repositories.edges.flatMap(
+        const commitActivities = commitHistory.user.repositories.edges.flatMap(
           (repo: any) =>
             repo.node.defaultBranchRef.target.history.edges.map(
               (commit: any) => ({
                 date: commit.node.committedDate.split("T")[0],
-                count: 1 as number, // Explicitly type count as number
+                count: 1 as number,
               })
             )
         );

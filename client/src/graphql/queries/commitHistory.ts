@@ -1,7 +1,7 @@
 // src/graphql/queries/repository.ts
 import { graphqlClient } from '../client';
 
-export const fetchUserRepositories = async (username: string, token: string) => {
+export const fetchUserCommitHistory = async (username: string, token: string) => {
 
   const query = `
     query($username: String!, $first: Int!, $after: String) {
