@@ -12,10 +12,6 @@ const Repositories = () => {
     (state: UserState) => state.profileSummary
   );
 
-  useEffect(() => {
-    console.log("repos: ", repos);
-  }, [repos]);
-
   const getActivityStatus = (updatedAt: string) => {
     const lastUpdated = moment(updatedAt);
     const now = moment();
