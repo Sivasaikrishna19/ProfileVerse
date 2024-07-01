@@ -87,7 +87,6 @@ const Page = () => {
         dispatch(setProfileSummary(tempUserData));
         setUserData(tempUserData);
       }
-
       setLoading(false);
     }
   };
