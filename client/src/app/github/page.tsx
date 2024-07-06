@@ -17,6 +17,7 @@ import { fetchUserLanguages } from "@/graphql/queries/languages";
 import { IRepository } from "@/interfaces/repo.interface";
 import CommitHeatmap from "@/components/CommitHeatmap";
 import Repositories from "@/components/Repositories/Repositories";
+import Contributions from "@/components/Contributions/Contributions";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -132,6 +133,7 @@ const Page = () => {
             userData?.login && (
               <>
                 <ProfileSummary />
+                <Contributions />
                 <CommitHeatmap />
                 <LanguagesSummary languages={languages} />
                 <Repositories />
