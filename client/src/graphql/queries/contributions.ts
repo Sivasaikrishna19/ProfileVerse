@@ -2,21 +2,20 @@ import { graphqlClient } from '../client';
 
 export const fetchContributions = async (username: string, token: string) => {
   const query = `
-    query($username: String!, $from: DateTime!, $to: DateTime!) {
+    query($username: String!) {
       user(login: $username) {
-        contributionsCollection(from: $from, to: $to) {
+        contributionsCollection {
           commitContributionsByRepository {
             repository {
               name
               url
+              owner {
+                login
+              }
             }
             contributions(first: 100) {
               nodes {
                 occurredAt
-                commit {
-                  message
-                  url
-                }
               }
               totalCount
             }
@@ -26,16 +25,21 @@ export const fetchContributions = async (username: string, token: string) => {
     }
   `;
 
-  const from = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString(); // 1 year back
-  const to = new Date().toISOString();
-
   const variables = {
     username,
-    from,
-    to,
   };
 
-  const result = await graphqlClient(query, variables, token);
+  try {
+    const result = await graphqlClient(query, variables, token, 'contributions');
+    console.log('result: ', result);
 
-  return result.user.contributionsCollection.commitContributionsByRepository;
+    // if (!result || !result.data || !result.data.user) {
+    //   throw new Error('Unexpected response structure: ' + JSON.stringify(result));
+    // }
+
+    return result.user.contributionsCollection.commitContributionsByRepository;
+  } catch (error) {
+    console.error('Error fetching contributions:', error);
+    throw error;
+  }
 };
