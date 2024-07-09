@@ -133,10 +133,10 @@ const Page = () => {
             userData?.login && (
               <>
                 <ProfileSummary />
-                <Contributions />
                 <CommitHeatmap />
+                <Contributions />
                 <LanguagesSummary languages={languages} />
-                <Repositories />
+                {/* <Repositories /> */}
               </>
             )
           )}

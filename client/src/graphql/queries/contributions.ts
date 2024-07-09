@@ -8,9 +8,21 @@ export const fetchContributions = async (username: string, token: string) => {
           commitContributionsByRepository {
             repository {
               name
+              description
               url
               owner {
                 login
+              }
+              createdAt
+              updatedAt
+              stargazerCount
+              forkCount
+              issues {
+                totalCount
+              }
+              primaryLanguage {
+                name
+                color
               }
             }
             contributions(first: 100) {
@@ -33,11 +45,11 @@ export const fetchContributions = async (username: string, token: string) => {
     const result = await graphqlClient(query, variables, token, 'contributions');
     console.log('result: ', result);
 
-    // if (!result || !result.data || !result.data.user) {
-    //   throw new Error('Unexpected response structure: ' + JSON.stringify(result));
-    // }
-
-    return result.user.contributionsCollection.commitContributionsByRepository;
+    if (result?.user) {
+      return result.user.contributionsCollection.commitContributionsByRepository;
+    } else {
+      throw new Error('User data not found in response');
+    }
   } catch (error) {
     console.error('Error fetching contributions:', error);
     throw error;
