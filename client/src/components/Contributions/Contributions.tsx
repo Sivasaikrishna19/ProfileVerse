@@ -109,14 +109,14 @@ const Contributions = () => {
             formatter={formatter}
           />
         </div>
-        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center">
+        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
           <Statistic
             title={<div className="text-[20px]">Total Contributions</div>}
             value={totalContributions}
             formatter={formatter}
           />
         </div>
-        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center">
+        <div className="bg-white p-4 rounded-md w-full md:mx-2 text-center mb-4 md:mb-0">
           <Statistic
             title={<div className="text-[20px]">Highest Contributions</div>}
             value={highestContributions}
@@ -137,9 +137,9 @@ const Contributions = () => {
                   color={activity.color}
                   placement="start"
                 >
-                  <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between min-h-[200px] mb-4">
+                  <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between  mb-4">
                     <div className="flex-1">
-                      <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col sm:flex-row items-center justify-between w-full">
                         <h4 className="text-lg font-bold">
                           <a
                             href={repo.repository.url}
@@ -149,11 +149,12 @@ const Contributions = () => {
                             {repo.repository.name}
                           </a>
                         </h4>
-                        <div className="p-3 rounded-md bg-[#d4e7fa]">
+                        <div className="p-3 rounded-md bg-[#d4e7fa] mt-2 sm:mt-0 sm:ml-4 w-full sm:w-auto mb-2 text-center">
                           <span className="font-semibold">Contributions: </span>
                           {repo.contributions.totalCount}
                         </div>
                       </div>
+
                       <p className="text-gray-600">
                         {repo.repository.description &&
                         repo.repository.description.length > 100 ? (
