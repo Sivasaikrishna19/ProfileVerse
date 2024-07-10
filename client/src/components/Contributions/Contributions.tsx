@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
-import { fetchUserContributions } from "@/utils/api";
+import { fetchRepositories } from "@/utils/api";
 import { Spin, Card, Badge, Tooltip, Statistic, StatisticProps } from "antd";
 import Cookies from "js-cookie";
-import { IRepository } from "@/interfaces/repo.interface";
 import moment from "moment";
 import CountUp from "react-countup";
+import { ForkOutlined } from "@ant-design/icons";
 
 const Contributions = () => {
   const { profileSummary }: any = useSelector(
@@ -21,7 +21,6 @@ const Contributions = () => {
   );
   const [totalContributions, setTotalContributions] = useState<number>();
   const [highestContributions, setHighestContributions] = useState<number>();
-  const [loading, setLoading] = useState<boolean>(true);
   const formatter: StatisticProps["formatter"] = (value) => (
     <CountUp end={value as number} separator="," />
   );
@@ -30,37 +29,41 @@ const Contributions = () => {
     const fetchData = async () => {
       if (profileSummary.login) {
         try {
-          const contributions = await fetchUserContributions(
+          const repositories = await fetchRepositories(
             profileSummary.login,
             accessToken!
           );
-          const ownRepos = contributions.filter(
-            (contribution: any) =>
-              contribution.repository.owner.login === profileSummary.login
+
+          const ownRepos = repositories.filter(
+            (repo: any) =>
+              repo.owner.login === profileSummary.login && !repo.isFork
           );
-          const otherRepos = contributions.filter(
-            (contribution: any) =>
-              contribution.repository.owner.login !== profileSummary.login
+
+          const otherRepos = repositories.filter(
+            (repo: any) =>
+              repo.isFork || repo.owner.login !== profileSummary.login
           );
+
           setOwnReposContributions(ownRepos);
           setOtherReposContributions(otherRepos);
 
-          // Calculate highest number of contributions and total number of contributions
           const highestContributions = Math.max(
-            ...contributions.map(
-              (contribution: any) => contribution.contributions.totalCount
+            ...repositories.map((repo: any) =>
+              !repo.isFork ? repo.contributions.totalCount : 0
             )
           );
-          setHighestContributions(highestContributions);
-          const totalContributions = contributions.reduce(
-            (acc: number, contribution: any) =>
-              acc + contribution.contributions.totalCount,
+
+          setHighestContributions(
+            highestContributions <= 0 ? 0 : highestContributions
+          );
+          const totalContributions = repositories.reduce(
+            (acc: number, repo: any) =>
+              acc + (!repo.isFork ? repo.contributions.totalCount : 0),
             0
           );
-          setTotalContributions(totalContributions);
-
-          console.log("Highest Contributions:", highestContributions);
-          console.log("Total Contributions:", totalContributions);
+          setTotalContributions(
+            totalContributions <= 0 ? 0 : totalContributions
+          );
         } catch (error) {
           console.error("Error fetching contributions:", error);
         }
@@ -69,6 +72,7 @@ const Contributions = () => {
 
     fetchData();
   }, [profileSummary]);
+
   const getActivityStatus = (updatedAt: string) => {
     const lastUpdated = moment(updatedAt);
     const now = moment();
@@ -80,13 +84,6 @@ const Contributions = () => {
     } else {
       return { status: "Inactive", color: "red" };
     }
-  };
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength) + "...";
   };
 
   return (
@@ -124,29 +121,147 @@ const Contributions = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <div>
           <h3 className="text-xl font-semibold mb-2">Own Repositories</h3>
-          {ownReposContributions.length > 0 ? (
-            ownReposContributions.map((repo) => {
-              const activity = getActivityStatus(repo.repository.updatedAt);
+          <div>
+            {ownReposContributions.length > 0 ? (
+              ownReposContributions.map((repo) => {
+                const activity = getActivityStatus(repo.updatedAt);
+                return (
+                  <Badge.Ribbon
+                    key={repo.name}
+                    text={activity.status}
+                    color={activity.color}
+                    placement="start"
+                  >
+                    <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex flex-col sm:flex-row items-center justify-between w-full">
+                          <h4 className="text-lg font-bold">
+                            <a
+                              href={repo.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <div className="flex items-center">
+                                {repo.name && repo.name.length > 25 ? (
+                                  <Tooltip title={repo.name}>
+                                    {repo.name.slice(0, 25) + "..."}
+                                  </Tooltip>
+                                ) : (
+                                  repo.name
+                                )}
+                                <div className="ml-1">
+                                  {repo.isFork ? <ForkOutlined /> : ""}
+                                </div>
+                              </div>
+                            </a>
+                          </h4>
+                          <div className="p-3 rounded-md bg-[#d4e7fa] mt-2 sm:mt-0 sm:ml-4 w-full sm:w-auto mb-2 text-center">
+                            <span className="font-semibold">
+                              Contributions:{" "}
+                            </span>
+                            {repo.contributions.totalCount}
+                          </div>
+                        </div>
+
+                        <p className="text-gray-600">
+                          {repo.description && repo.description.length > 100 ? (
+                            <Tooltip title={repo.description}>
+                              {repo.description.slice(0, 100) + "..."}
+                            </Tooltip>
+                          ) : (
+                            repo.description || "No description available."
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mt-2">
+                          <div>
+                            <span className="font-semibold">Stars: </span>
+                            {repo.stargazerCount}
+                          </div>
+                          <div>
+                            <span className="font-semibold">Forks: </span>
+                            {repo.forkCount}
+                          </div>
+                          <div>
+                            <span className="font-semibold">Issues: </span>
+                            {repo.issues.totalCount || 0}
+                          </div>
+                        </div>
+                        <div className="mt-2">
+                          <span className="font-semibold">Language: </span>
+                          {repo.primaryLanguage
+                            ? repo.primaryLanguage.name
+                            : "N/A"}
+                        </div>
+                        <div className="flex justify-between mt-2">
+                          <Tooltip
+                            title={`Created at: ${new Date(
+                              repo.createdAt
+                            ).toLocaleDateString()}`}
+                          >
+                            <div>
+                              <span className="font-semibold">Created: </span>
+                              {new Date(repo.createdAt).toLocaleDateString()}
+                            </div>
+                          </Tooltip>
+                          <Tooltip
+                            title={`Last Updated: ${new Date(
+                              repo.updatedAt
+                            ).toLocaleDateString()}`}
+                          >
+                            <div>
+                              <span className="font-semibold">Updated: </span>
+                              {new Date(repo.updatedAt).toLocaleDateString()}
+                            </div>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </Card>
+                  </Badge.Ribbon>
+                );
+              })
+            ) : (
+              <p>No contributions to own repositories.</p>
+            )}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Other Repositories</h3>
+          {otherReposContributions.length > 0 ? (
+            otherReposContributions.map((repo) => {
+              const activity = getActivityStatus(repo.updatedAt);
               return (
                 <Badge.Ribbon
-                  key={repo.repository.name}
+                  key={repo.name}
                   text={activity.status}
                   color={activity.color}
                   placement="start"
                 >
-                  <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between  mb-4">
+                  <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex flex-col sm:flex-row items-center justify-between w-full">
                         <h4 className="text-lg font-bold">
                           <a
-                            href={repo.repository.url}
+                            href={repo.url}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            {repo.repository.name}
+                            <div className="flex items-center">
+                              {repo.name && repo.name.length > 25 ? (
+                                <Tooltip title={repo.name}>
+                                  {repo.name.slice(0, 25) + "..."}
+                                </Tooltip>
+                              ) : (
+                                repo.name
+                              )}
+                              <div className="ml-1">
+                                {repo.isFork ? <ForkOutlined /> : ""}
+                              </div>
+                            </div>
                           </a>
                         </h4>
                         <div className="p-3 rounded-md bg-[#d4e7fa] mt-2 sm:mt-0 sm:ml-4 w-full sm:w-auto mb-2 text-center">
@@ -156,14 +271,12 @@ const Contributions = () => {
                       </div>
 
                       <p className="text-gray-600">
-                        {repo.repository.description &&
-                        repo.repository.description.length > 100 ? (
-                          <Tooltip title={repo.repository.description}>
-                            {repo.repository.description.slice(0, 100) + "..."}
+                        {repo.description && repo.description.length > 100 ? (
+                          <Tooltip title={repo.description}>
+                            {repo.description.slice(0, 100) + "..."}
                           </Tooltip>
                         ) : (
-                          repo.repository.description ||
-                          "No description available."
+                          repo.description || "No description available."
                         )}
                       </p>
                     </div>
@@ -171,144 +284,42 @@ const Contributions = () => {
                       <div className="flex justify-between mt-2">
                         <div>
                           <span className="font-semibold">Stars: </span>
-                          {repo.repository.stargazerCount}
+                          {repo.stargazerCount}
                         </div>
                         <div>
                           <span className="font-semibold">Forks: </span>
-                          {repo.repository.forkCount}
+                          {repo.forkCount}
                         </div>
                         <div>
                           <span className="font-semibold">Issues: </span>
-                          {repo.repository.issues.totalCount || 0}
+                          {repo.issues.totalCount || 0}
                         </div>
                       </div>
                       <div className="mt-2">
                         <span className="font-semibold">Language: </span>
-                        {repo.repository.primaryLanguage
-                          ? repo.repository.primaryLanguage.name
+                        {repo.primaryLanguage
+                          ? repo.primaryLanguage.name
                           : "N/A"}
                       </div>
                       <div className="flex justify-between mt-2">
                         <Tooltip
                           title={`Created at: ${new Date(
-                            repo.repository.createdAt
+                            repo.createdAt
                           ).toLocaleDateString()}`}
                         >
                           <div>
                             <span className="font-semibold">Created: </span>
-                            {new Date(
-                              repo.repository.createdAt
-                            ).toLocaleDateString()}
+                            {new Date(repo.createdAt).toLocaleDateString()}
                           </div>
                         </Tooltip>
                         <Tooltip
                           title={`Last Updated: ${new Date(
-                            repo.repository.updatedAt
+                            repo.updatedAt
                           ).toLocaleDateString()}`}
                         >
                           <div>
                             <span className="font-semibold">Updated: </span>
-                            {new Date(
-                              repo.repository.updatedAt
-                            ).toLocaleDateString()}
-                          </div>
-                        </Tooltip>
-                      </div>
-                    </div>
-                  </Card>
-                </Badge.Ribbon>
-              );
-            })
-          ) : (
-            <p>No contributions to own repositories.</p>
-          )}
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-2">Other Repositories</h3>
-          {otherReposContributions.length > 0 ? (
-            otherReposContributions.map((repo) => {
-              const activity = getActivityStatus(repo.repository.updatedAt);
-              return (
-                <Badge.Ribbon
-                  key={repo.repository.name}
-                  text={activity.status}
-                  color={activity.color}
-                  placement="start"
-                >
-                  <Card className="bg-white p-4 rounded-md shadow-md flex flex-col justify-between min-h-[200px] mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between w-full">
-                        <h4 className="text-lg font-bold">
-                          <a
-                            href={repo.repository.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {repo.repository.name}
-                          </a>
-                        </h4>
-                        <div className="p-3 rounded-md bg-[#d4e7fa]">
-                          <span className="font-semibold">Contributions: </span>
-                          {repo.contributions.totalCount}
-                        </div>
-                      </div>
-
-                      <p className="text-gray-600">
-                        {repo.repository.description &&
-                        repo.repository.description.length > 100 ? (
-                          <Tooltip title={repo.repository.description}>
-                            {repo.repository.description.slice(0, 100) + "..."}
-                          </Tooltip>
-                        ) : (
-                          repo.repository.description ||
-                          "No description available."
-                        )}
-                      </p>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mt-2">
-                        <div>
-                          <span className="font-semibold">Stars: </span>
-                          {repo.repository.stargazerCount}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Forks: </span>
-                          {repo.repository.forkCount}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Issues: </span>
-                          {repo.repository.issues.totalCount || 0}
-                        </div>
-                      </div>
-                      <div className="mt-2">
-                        <span className="font-semibold">Language: </span>
-                        {repo.repository.primaryLanguage
-                          ? repo.repository.primaryLanguage.name
-                          : "N/A"}
-                      </div>
-                      <div className="flex justify-between mt-2">
-                        <Tooltip
-                          title={`Created at: ${new Date(
-                            repo.repository.createdAt
-                          ).toLocaleDateString()}`}
-                        >
-                          <div>
-                            <span className="font-semibold">Created: </span>
-                            {new Date(
-                              repo.repository.createdAt
-                            ).toLocaleDateString()}
-                          </div>
-                        </Tooltip>
-                        <Tooltip
-                          title={`Last Updated: ${new Date(
-                            repo.repository.updatedAt
-                          ).toLocaleDateString()}`}
-                        >
-                          <div>
-                            <span className="font-semibold">Updated: </span>
-                            {new Date(
-                              repo.repository.updatedAt
-                            ).toLocaleDateString()}
+                            {new Date(repo.updatedAt).toLocaleDateString()}
                           </div>
                         </Tooltip>
                       </div>

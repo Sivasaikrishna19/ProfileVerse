@@ -13,8 +13,15 @@ export const fetchAllRepositories = async (username: string, token: string) => {
             node {
               name
               description
+              isFork
+              owner {
+                login
+              }
               stargazerCount
               forkCount
+              issues {
+                totalCount
+              }
               watchers {
                 totalCount
               }
@@ -34,6 +41,18 @@ export const fetchAllRepositories = async (username: string, token: string) => {
               }
               createdAt
               updatedAt
+              contributions: defaultBranchRef {
+                target {
+                  ... on Commit {
+                    history(first: 100) {
+                      nodes {
+                        committedDate
+                      }
+                      totalCount
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -54,7 +73,15 @@ export const fetchAllRepositories = async (username: string, token: string) => {
 
   while (hasNextPage) {
     const result = await graphqlClient(query, { ...variables, after: endCursor }, token);
-    const fetchedRepos = result.user.repositories.edges.map((edge: any) => edge.node);
+    const fetchedRepos = result.user.repositories.edges.map((edge: any) => ({
+      ...edge.node,
+      contributions: {
+        nodes: edge.node.contributions?.target?.history?.nodes?.map((node: any) => ({
+          occurredAt: node.committedDate,
+        })) || [],
+        totalCount: edge.node.contributions?.target?.history?.totalCount || 0,
+      },
+    }));
     repositories = [...repositories, ...fetchedRepos];
     hasNextPage = result.user.repositories.pageInfo.hasNextPage;
     endCursor = result.user.repositories.pageInfo.endCursor;
