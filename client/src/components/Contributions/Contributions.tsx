@@ -264,6 +264,7 @@ const Contributions = () => {
                             </div>
                           </a>
                         </h4>
+
                         <div className="p-3 rounded-md bg-[#d4e7fa] mt-2 sm:mt-0 sm:ml-4 w-full sm:w-auto mb-2 text-center">
                           <span className="font-semibold">Contributions: </span>
                           {repo.contributions.totalCount}

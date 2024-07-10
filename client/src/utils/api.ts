@@ -14,7 +14,7 @@ export const fetchUserData = async (username: string, token: string) => {
 export const fetchRepositories = async (username: string, token: string) => {
   try {
     const repositories = await fetchAllRepositories(username, token);
-    // console.log('repositories: ',repositories);
+    console.log('repositories: ',repositories);
     return repositories;
   } catch (error) {
     console.error('Error fetching repositories:', error);

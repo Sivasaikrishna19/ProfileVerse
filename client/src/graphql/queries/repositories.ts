@@ -14,6 +14,7 @@ export const fetchAllRepositories = async (username: string, token: string) => {
               name
               description
               isFork
+              url
               owner {
                 login
               }
