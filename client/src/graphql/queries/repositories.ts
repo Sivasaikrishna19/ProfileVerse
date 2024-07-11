@@ -23,6 +23,9 @@ export const fetchAllRepositories = async (username: string, token: string) => {
               issues {
                 totalCount
               }
+              pullRequests(states: [OPEN, CLOSED, MERGED], first: 100) {
+                totalCount
+              }
               watchers {
                 totalCount
               }
