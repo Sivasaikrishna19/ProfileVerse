@@ -13,6 +13,7 @@ import {
   StatisticProps,
   TabsProps,
   Tabs,
+  Select,
 } from "antd";
 import Cookies from "js-cookie";
 import moment from "moment";
@@ -35,6 +36,11 @@ const Contributions = () => {
   const [otherReposContributionsCount, setOtherReposContributionsCount] =
     useState<number>(0);
   const [pullRequestsCount, setPullRequestsCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [languageOptions, setLanguageOptions] = useState<any[]>([]);
+  const [filteredRepos, setFilteredRepos] = useState<any[]>([]);
+  const [sortCriteria, setSortCriteria] = useState<string>("lastUpdated");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
 
   const formatter: StatisticProps["formatter"] = (value) => (
     <CountUp end={value as number} separator="," />
@@ -43,7 +49,48 @@ const Contributions = () => {
   const onChange = (key: string) => {
     console.log(key);
   };
-  const [loading, setLoading] = useState<boolean>(true);
+
+  const handleSortChange = (value: string) => {
+    setSortCriteria(value);
+    sortRepositories(filteredRepos, value);
+  };
+
+  const handleLanguageChange = (value: string) => {
+    setSelectedLanguage(value);
+    const repos =
+      value === "all"
+        ? [...ownReposContributions, ...otherReposContributions]
+        : [...ownReposContributions, ...otherReposContributions].filter(
+            (repo) => repo.primaryLanguage?.name.toLowerCase() === value
+          );
+    sortRepositories(repos, sortCriteria);
+  };
+
+  const sortRepositories = (repos: any[], criteria: string) => {
+    let sortedRepos;
+    switch (criteria) {
+      case "name":
+        sortedRepos = repos.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "contributions":
+        sortedRepos = repos.sort(
+          (a, b) => b.contributions?.totalCount - a.contributions?.totalCount
+        );
+        break;
+      case "stars":
+        sortedRepos = repos.sort((a, b) => b.stargazerCount - a.stargazerCount);
+        break;
+      case "lastUpdated":
+      default:
+        sortedRepos = repos.sort(
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
+        break;
+    }
+    setFilteredRepos(sortedRepos);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (profileSummary.login) {
@@ -62,6 +109,21 @@ const Contributions = () => {
             (repo: any) =>
               repo.isFork || repo.owner.login !== profileSummary.login
           );
+
+          const allRepos = [...ownRepos, ...otherRepos];
+          const languageOptions = Array.from(
+            new Set(allRepos.map((repo: any) => repo.primaryLanguage?.name))
+          )
+            .filter((lang) => lang)
+            .map((lang) => ({
+              value: lang.toLowerCase(),
+              label: lang,
+            }));
+          setLanguageOptions([
+            { value: "all", label: "All" },
+            ...languageOptions,
+          ]);
+
           const ownReposContributionsCount = ownRepos.reduce(
             (acc: any, repo: any) =>
               acc + (repo.contributions?.totalCount || 0),
@@ -73,15 +135,20 @@ const Contributions = () => {
               acc + (repo.contributions?.totalCount || 0),
             0
           );
+
           const pullRequestsCount = repositories.reduce(
             (acc: any, repo: any) => acc + (repo.pullRequests?.totalCount || 0),
             0
           );
+
           setPullRequestsCount(pullRequestsCount);
           setOwnReposContributionsCount(ownReposContributionsCount);
           setOtherReposContributionsCount(otherReposContributionsCount);
           setOwnReposContributions(ownRepos);
           setOtherReposContributions(otherRepos);
+
+          setFilteredRepos(allRepos);
+          sortRepositories(allRepos, sortCriteria);
         } catch (error) {
           console.error("Error fetching contributions:", error);
         } finally {
@@ -92,14 +159,6 @@ const Contributions = () => {
 
     fetchData();
   }, [profileSummary]);
-  useEffect(() => {
-    console.log(
-      "own: ",
-      ownReposContributions,
-      "other",
-      otherReposContributions
-    );
-  }, [ownReposContributions, otherReposContributions]);
 
   const items: TabsProps["items"] = [
     {
@@ -110,7 +169,12 @@ const Contributions = () => {
         </div>
       ),
       children: (
-        <OwnContributions ownReposContributions={ownReposContributions} />
+        <OwnContributions
+          ownReposContributions={filteredRepos.filter(
+            (repo: any) =>
+              !repo.isFork && repo.owner.login === profileSummary.login
+          )}
+        />
       ),
     },
     {
@@ -122,7 +186,9 @@ const Contributions = () => {
       ),
       children: (
         <OpenSourceContributions
-          openSourceContributions={otherReposContributions}
+          openSourceContributions={filteredRepos.filter(
+            (repo) => repo.isFork || repo.owner.login !== profileSummary.login
+          )}
         />
       ),
     },
@@ -183,7 +249,53 @@ const Contributions = () => {
           />
         </div>
       </div>
-      <div className="p-2">
+      <div className="p-2 w-full">
+        <div className="flex flex-col sm:flex-row items-center mb-4 gap-4 w-full">
+          <div className="w-full sm:w-1/3">
+            <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
+              Sort By
+            </label>
+            <Select
+              defaultValue="lastUpdated"
+              style={{ width: "100%" }}
+              onChange={handleSortChange}
+              options={[
+                { value: "lastUpdated", label: "Last updated" },
+                { value: "contributions", label: "Contributions" },
+                { value: "name", label: "Name" },
+                { value: "stars", label: "Stars" },
+              ]}
+            />
+          </div>
+          <div className="w-full sm:w-1/3">
+            <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
+              Repo Health
+            </label>
+            <Select
+              defaultValue="all"
+              style={{ width: "100%" }}
+              //   onChange={handleChange}
+              options={[
+                { value: "all", label: "All" },
+                { value: "excellent", label: "Excellent" },
+                { value: "good", label: "Good" },
+                { value: "poor", label: "Poor" },
+              ]}
+            />
+          </div>
+          <div className="w-full sm:w-1/3">
+            <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
+              Language
+            </label>
+            <Select
+              defaultValue="all"
+              style={{ width: "100%" }}
+              onChange={handleLanguageChange}
+              options={languageOptions}
+            />
+          </div>
+        </div>
+
         <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
       </div>
     </div>
