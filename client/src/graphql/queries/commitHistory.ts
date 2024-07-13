@@ -1,14 +1,11 @@
 // src/graphql/queries/repository.ts
-import { graphqlClient } from '../client';
+import { graphqlClient } from "../client";
 
-export const fetchUserCommitHistory = async (username: string, token: string, year: number) => {
-  const startDate = new Date(`${year}-01-01`).toISOString();
-  const endDate = new Date(`${year}-12-31`).toISOString();
-
+export const fetchUserCommitHistory = async (username: string, token: string, startDate: string, endDate: string) => {
   const query = `
-    query($username: String!, $first: Int!, $after: String, $startDate: GitTimestamp!, $endDate: GitTimestamp!) {
+    query($username: String!, $startDate: GitTimestamp!, $endDate: GitTimestamp!) {
       user(login: $username) {
-        repositories(first: $first, after: $after) {
+        repositories(first: 100) {
           edges {
             node {
               name
@@ -34,11 +31,18 @@ export const fetchUserCommitHistory = async (username: string, token: string, ye
 
   const variables = {
     username,
-    first: 100,
-    after: null,
     startDate,
     endDate,
   };
 
-  return graphqlClient(query, variables, token);
+  console.log("Fetching commit history with variables:", variables);
+
+  try {
+    const result = await graphqlClient(query, variables, token);
+    console.log("Commit history result:", result);
+    return result;
+  } catch (error) {
+    console.error("Error fetching commit history:", error);
+    throw error;
+  }
 };

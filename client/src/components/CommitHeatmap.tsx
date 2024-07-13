@@ -25,12 +25,21 @@ const CommitHeatmap = () => {
   const accessToken: string | undefined = Cookies.get("access_token");
 
   const fetchData = async (year: number) => {
+    const startDate = `${year}-01-01T00:00:00Z`;
+    const endDate = `${year}-12-31T23:59:59Z`;
+
     try {
       const commitHistory = await fetchUserCommitHistory(
         profileSummary.login,
         accessToken!,
-        year
+        startDate,
+        endDate
       );
+
+      if (!commitHistory || !commitHistory.user) {
+        throw new Error("No data found");
+      }
+
       const commitActivities = commitHistory.user.repositories.edges.flatMap(
         (repo: any) => {
           if (
@@ -81,7 +90,6 @@ const CommitHeatmap = () => {
     const fetchInitialData = async () => {
       if (profileSummary.login) {
         try {
-          // Fetch the user creation year
           const userCreationYear = new Date(
             profileSummary.createdAt
           ).getFullYear();
@@ -103,7 +111,7 @@ const CommitHeatmap = () => {
   }, [profileSummary.login, profileSummary.createdAt]);
 
   return (
-    <div className="bg-[#d4e7fa] p-6 rounded-md shadow-lg mt-6">
+    <div className="bg-[#f0f4f8] p-6 rounded-md shadow-lg mt-6">
       <div className="text-semibold text-2xl text-center mb-4">
         Commit History
       </div>
@@ -122,7 +130,7 @@ const CommitHeatmap = () => {
         </Select>
       </div>
       <CalendarHeatmap
-        startDate={new Date(`${selectedYear}-01-01`)}
+        startDate={new Date(`${selectedYear - 1}-12-31`)}
         endDate={new Date(`${selectedYear}-12-31`)}
         values={commitActivity}
         classForValue={(value) => {
@@ -131,26 +139,13 @@ const CommitHeatmap = () => {
           }
           return `color-github-${Math.min(value.count, 4)}`;
         }}
-        tooltipDataAttrs={(value: any) => {
-          return {
-            "data-tip": `${value.date}: ${value.count} commit${
-              value.count > 1 ? "s" : ""
-            }`,
-          };
-        }}
+        tooltipDataAttrs={(value: any) => ({
+          title: `${value.date}: ${value.count} commit${
+            value.count > 1 ? "s" : ""
+          }`,
+        })}
       />
-      {/* {commitActivity.map((activity) => (
-        <Tooltip
-          key={activity.date}
-          title={`${activity.date}: ${activity.count} commit${
-            activity.count > 1 ? "s" : ""
-          }`}
-        >
-          <span className={`color-github-${Math.min(activity.count, 4)}`}>
-            {activity.date}
-          </span>
-        </Tooltip>
-      ))} */}
+      <Tooltip />
     </div>
   );
 };
