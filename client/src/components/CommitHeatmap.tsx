@@ -1,23 +1,23 @@
-// src/components/CommitHeatmap.tsx
 import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
 import Cookies from "js-cookie";
+import { Select, Spin } from "antd";
 import { fetchUserCommitHistory } from "@/graphql/queries/commitHistory";
-import { Select, Tooltip } from "antd";
 
 const { Option } = Select;
 
 const CommitHeatmap = () => {
   const [commitActivity, setCommitActivity] = useState<
-    { date: string; count: number }[]
+    { date: string; count: number; isPrivate: boolean }[]
   >([]);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
@@ -25,43 +25,24 @@ const CommitHeatmap = () => {
   const accessToken: string | undefined = Cookies.get("access_token");
 
   const fetchData = async (year: number) => {
-    const startDate = `${year}-01-01T00:00:00Z`;
-    const endDate = `${year}-12-31T23:59:59Z`;
-
+    setLoading(true);
     try {
       const commitHistory = await fetchUserCommitHistory(
         profileSummary.login,
         accessToken!,
-        startDate,
-        endDate
+        year
       );
 
-      if (!commitHistory || !commitHistory.user) {
-        throw new Error("No data found");
-      }
-
-      const commitActivities = commitHistory.user.repositories.edges.flatMap(
-        (repo: any) => {
-          if (
-            repo.node.defaultBranchRef &&
-            repo.node.defaultBranchRef.target &&
-            repo.node.defaultBranchRef.target.history
-          ) {
-            return repo.node.defaultBranchRef.target.history.edges.map(
-              (commit: any) => ({
-                date: commit.node.committedDate.split("T")[0],
-                count: 1,
-              })
-            );
-          }
-          return [];
-        }
-      );
-
-      const aggregatedData = commitActivities.reduce(
-        (acc: { [date: string]: number }, { date, count }: any) => {
+      const aggregatedData = commitHistory.reduce(
+        (
+          acc: { [date: string]: { count: number; isPrivate: boolean } },
+          { date, count, isPrivate }: any
+        ) => {
           if (date) {
-            acc[date] = (acc[date] || 0) + count;
+            if (!acc[date]) {
+              acc[date] = { count: 0, isPrivate };
+            }
+            acc[date].count += count;
           }
           return acc;
         },
@@ -69,15 +50,19 @@ const CommitHeatmap = () => {
       );
 
       const heatmapData: any = Object.entries(aggregatedData).map(
-        ([date, count]) => ({
+        ([date, { count, isPrivate }]) => ({
           date,
           count,
+          isPrivate,
         })
       );
 
+      console.log("commit activity", heatmapData);
       setCommitActivity(heatmapData);
     } catch (error) {
       console.error("Error fetching commit activities:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,21 +91,19 @@ const CommitHeatmap = () => {
         }
       }
     };
-
     fetchInitialData();
   }, [profileSummary.login, profileSummary.createdAt]);
 
   return (
-    <div className="bg-[#f0f4f8] p-6 rounded-md shadow-lg mt-6">
-      <div className="text-semibold text-2xl text-center mb-4">
+    <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 overflow-y-auto">
+      <div className="text-semibold text-[20px] text-center mb-2">
         Commit History
       </div>
       <div className="flex justify-center mb-4">
         <Select
           defaultValue={selectedYear}
-          style={{ width: 200 }}
+          style={{ width: 120 }}
           onChange={handleYearChange}
-          className="w-full max-w-xs"
         >
           {availableYears.map((year) => (
             <Option key={year} value={year}>
@@ -129,23 +112,34 @@ const CommitHeatmap = () => {
           ))}
         </Select>
       </div>
-      <CalendarHeatmap
-        startDate={new Date(`${selectedYear - 1}-12-31`)}
-        endDate={new Date(`${selectedYear}-12-31`)}
-        values={commitActivity}
-        classForValue={(value) => {
-          if (!value) {
-            return "color-empty";
-          }
-          return `color-github-${Math.min(value.count, 4)}`;
-        }}
-        tooltipDataAttrs={(value: any) => ({
-          title: `${value.date}: ${value.count} commit${
-            value.count > 1 ? "s" : ""
-          }`,
-        })}
-      />
-      <Tooltip />
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <Spin />
+        </div>
+      ) : (
+        <>
+          <div className="text-center mt-2">
+            {commitActivity.reduce((acc, { count }) => acc + count, 0)}{" "}
+            Contributions in {selectedYear}
+          </div>
+          <CalendarHeatmap
+            startDate={new Date(`${selectedYear - 1}-12-31`)}
+            endDate={new Date(`${selectedYear}-12-31`)}
+            values={commitActivity}
+            classForValue={(value) => {
+              if (!value) {
+                return "color-empty";
+              }
+              return `color-github-${Math.min(value.count, 4)}`;
+            }}
+            tooltipDataAttrs={(value: any) => ({
+              "data-tip": `${value.date}: ${value.count} commits ${
+                value.isPrivate ? "(Private)" : ""
+              }`,
+            })}
+          />
+        </>
+      )}
     </div>
   );
 };

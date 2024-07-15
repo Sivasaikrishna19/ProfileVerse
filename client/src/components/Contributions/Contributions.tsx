@@ -4,21 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
 import { fetchRepositories } from "@/utils/api";
-import {
-  Spin,
-  Card,
-  Badge,
-  Tooltip,
-  Statistic,
-  StatisticProps,
-  TabsProps,
-  Tabs,
-  Select,
-} from "antd";
+import { Statistic, StatisticProps, TabsProps, Tabs, Select } from "antd";
 import Cookies from "js-cookie";
-import moment from "moment";
 import CountUp from "react-countup";
-import { ForkOutlined } from "@ant-design/icons";
 import OwnContributions from "./Tabs/OwnContributions";
 import OpenSourceContributions from "./Tabs/OpenSourceContributions";
 
