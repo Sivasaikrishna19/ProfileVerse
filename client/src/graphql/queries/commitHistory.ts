@@ -2,25 +2,24 @@ import { graphqlClient } from '../client';
 
 export const fetchUserCommitHistory = async (username: string, token: string, year: number) => {
   const query = `
-    query($username: String!, $first: Int!, $after: String) {
-      user(login: $username) {
-        repositories(first: $first, after: $after) {
-          pageInfo {
-            endCursor
-            hasNextPage
-          }
-          edges {
-            node {
-              name
-              isPrivate
-              defaultBranchRef {
-                target {
-                  ... on Commit {
-                    history(first: 100, since: "${year-1}-12-31T23:59:59Z", until: "${year}-12-31T23:59:59Z") {
-                      edges {
-                        node {
-                          committedDate
-                        }
+  query($username: String!, $first: Int!, $after: String) {
+    user(login: $username) {
+      repositories(first: $first, after: $after) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            name
+            isPrivate
+            defaultBranchRef {
+              target {
+                ... on Commit {
+                  history(first: 100, since: "${year-1}-12-31T23:59:59Z", until: "${year}-12-31T23:59:59Z") {
+                    edges {
+                      node {
+                        committedDate
                       }
                     }
                   }
@@ -31,6 +30,7 @@ export const fetchUserCommitHistory = async (username: string, token: string, ye
         }
       }
     }
+  }  
   `;
 
   const variables = {
@@ -49,7 +49,7 @@ export const fetchUserCommitHistory = async (username: string, token: string, ye
       repo.node.defaultBranchRef?.target?.history.edges.map((commit: any) => ({
         date: commit.node.committedDate.split("T")[0],
         count: 1,
-        isPrivate: repo.node.isPrivate
+        isPrivate: repo.node.isPrivate,
       })) || []
     );
     allCommits = [...allCommits, ...commits];
