@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Button, Spin } from "antd";
+import { Button, FloatButton, Spin } from "antd";
 import Search from "antd/es/input/Search";
 import { fetchRepositories, fetchUserData } from "@/utils/api";
 import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
@@ -152,6 +152,11 @@ const Page = () => {
           </Button>
         </div>
       )}
+      <FloatButton.BackTop
+        visibilityHeight={10}
+        style={{ right: "90px" }}
+        className="max-md:right-10"
+      />
     </div>
   );
 };
