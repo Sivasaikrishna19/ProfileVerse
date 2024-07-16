@@ -133,7 +133,7 @@ const Page = () => {
             userData?.login && (
               <>
                 <ProfileSummary />
-                <CommitHeatmap />
+                {/* <CommitHeatmap /> */}
                 <Contributions />
                 <LanguagesSummary languages={languages} />
                 {/* <Repositories /> */}

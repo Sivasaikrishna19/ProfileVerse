@@ -96,10 +96,7 @@ const CommitHeatmap = () => {
 
   return (
     <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 overflow-y-auto">
-      <div className="text-semibold text-[20px] text-center mb-2">
-        Commit History
-      </div>
-      <div className="flex justify-center mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 w-full">
         <Select
           defaultValue={selectedYear}
           style={{ width: 120 }}
@@ -111,17 +108,19 @@ const CommitHeatmap = () => {
             </Option>
           ))}
         </Select>
-      </div>
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <Spin />
-        </div>
-      ) : (
-        <>
+        {!loading && (
           <div className="text-center mt-2">
             {commitActivity.reduce((acc, { count }) => acc + count, 0)}{" "}
             Contributions in {selectedYear}
           </div>
+        )}
+      </div>
+      <div>
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <Spin />
+          </div>
+        ) : (
           <CalendarHeatmap
             startDate={new Date(`${selectedYear - 1}-12-31`)}
             endDate={new Date(`${selectedYear}-12-31`)}
@@ -138,8 +137,8 @@ const CommitHeatmap = () => {
               }`,
             })}
           />
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

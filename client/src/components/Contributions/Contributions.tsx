@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import CountUp from "react-countup";
 import OwnContributions from "./Tabs/OwnContributions";
 import OpenSourceContributions from "./Tabs/OpenSourceContributions";
+import CommitHeatmap from "../CommitHeatmap";
 
 const Contributions = () => {
   const { profileSummary }: any = useSelector(
@@ -237,6 +238,7 @@ const Contributions = () => {
           />
         </div>
       </div>
+      <CommitHeatmap />
       <div className="p-2 w-full">
         <div className="flex flex-col sm:flex-row items-center mb-4 gap-4 w-full">
           <div className="w-full sm:w-1/3">
