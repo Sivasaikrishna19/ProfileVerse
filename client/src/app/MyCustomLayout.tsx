@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import useSelectedKey from "@/hooks/useSelectedKey";
 
 const { Content, Footer, Sider } = Layout;
+export const featureFlag = process.env.NODE_ENV === "production" ? false : true;
 
 export default function MyCustomLayout({
   children,
@@ -20,18 +21,26 @@ export default function MyCustomLayout({
   const navigateToPage = (path: string) => {
     router.push(path);
   };
-  const items = [
-    {
-      key: "1",
-      icon: <GithubOutlined />,
-      label: <Link href="/github">GitInsight</Link>,
-    },
-    {
-      key: "2",
-      icon: <LinkedinOutlined />,
-      label: <Link href="/linkedin">LinkedIn</Link>,
-    },
-  ];
+  const items = featureFlag
+    ? [
+        {
+          key: "1",
+          icon: <GithubOutlined />,
+          label: <Link href="/github">GitInsight</Link>,
+        },
+        {
+          key: "2",
+          icon: <LinkedinOutlined />,
+          label: <Link href="/linkedin">LinkedIn</Link>,
+        },
+      ]
+    : [
+        {
+          key: "1",
+          icon: <GithubOutlined />,
+          label: <Link href="/github">GitInsight</Link>,
+        },
+      ];
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();

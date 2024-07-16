@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button, FloatButton, Spin } from "antd";
 import Search from "antd/es/input/Search";
@@ -15,8 +15,6 @@ import { setAccessToken } from "@/store/slices/authentication";
 import { IProfileSummary } from "@/interfaces/profileSummary.interface";
 import { fetchUserLanguages } from "@/graphql/queries/languages";
 import { IRepository } from "@/interfaces/repo.interface";
-import CommitHeatmap from "@/components/CommitHeatmap";
-import Repositories from "@/components/Repositories/Repositories";
 import Contributions from "@/components/Contributions/Contributions";
 
 const Page = () => {
