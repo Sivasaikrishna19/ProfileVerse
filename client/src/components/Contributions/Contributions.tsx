@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
 import { fetchRepositories } from "@/utils/api";
-import { Statistic, StatisticProps, TabsProps, Tabs, Select } from "antd";
+import { Statistic, StatisticProps, TabsProps, Tabs, Select, Spin } from "antd";
 import Cookies from "js-cookie";
 import CountUp from "react-countup";
 import OwnContributions from "./Tabs/OwnContributions";
@@ -88,6 +88,7 @@ const Contributions = () => {
             profileSummary.login,
             accessToken!
           );
+          setLoading(false);
 
           const ownRepos = repositories.filter(
             (repo: any) =>
@@ -96,7 +97,7 @@ const Contributions = () => {
 
           const otherRepos = repositories.filter(
             (repo: any) =>
-              repo.isFork || repo.owner.login !== profileSummary.login
+              !repo.isFork && repo.owner.login !== profileSummary.login
           );
 
           const allRepos = [...ownRepos, ...otherRepos];
@@ -140,7 +141,6 @@ const Contributions = () => {
           sortRepositories(allRepos, sortCriteria);
         } catch (error) {
           console.error("Error fetching contributions:", error);
-        } finally {
           setLoading(false);
         }
       }
@@ -286,7 +286,11 @@ const Contributions = () => {
           </div>
         </div>
 
-        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        {!loading ? (
+          <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        ) : (
+          <Spin />
+        )}
       </div>
     </div>
   );

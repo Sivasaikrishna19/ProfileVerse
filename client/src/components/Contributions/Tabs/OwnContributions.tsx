@@ -4,6 +4,7 @@ import React from "react";
 import { Badge, Card, Tooltip } from "antd";
 import { ForkOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { analyzeCommitFrequency } from "../RepoHealth/CommitFrequency";
 
 const OwnContributions = ({
   ownReposContributions,
@@ -63,7 +64,7 @@ const OwnContributions = ({
                       </h4>
                       <div className="p-3 rounded-md bg-[#d4e7fa] mt-2 sm:mt-0 sm:ml-4 w-full sm:w-auto mb-2 text-center">
                         <span className="font-semibold">Contributions: </span>
-                        {repo.contributions.totalCount}
+                        {analyzeCommitFrequency(repo.allCommits).toFixed(2)}
                       </div>
                     </div>
 

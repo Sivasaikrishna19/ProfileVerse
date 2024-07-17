@@ -1,7 +1,7 @@
 import { graphqlClient } from '../client';
 
 export const fetchAllRepositories = async (username: string, token: string) => {
-    const query = `
+  const queryRepositories = `
     query($username: String!, $first: Int!, $after: String) {
       user(login: $username) {
         repositories(first: $first, after: $after) {
@@ -63,7 +63,30 @@ export const fetchAllRepositories = async (username: string, token: string) => {
       }
     }
   `;
-  
+
+  const queryCommits = `
+    query($owner: String!, $name: String!, $after: String) {
+      repository(owner: $owner, name: $name) {
+        defaultBranchRef {
+          target {
+            ... on Commit {
+              history(first: 100, after: $after) {
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+                edges {
+                  node {
+                    committedDate
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
 
   const variables = {
     username,
@@ -76,7 +99,7 @@ export const fetchAllRepositories = async (username: string, token: string) => {
   let endCursor = null;
 
   while (hasNextPage) {
-    const result = await graphqlClient(query, { ...variables, after: endCursor }, token);
+    const result = await graphqlClient(queryRepositories, { ...variables, after: endCursor }, token);
     const fetchedRepos = result.user.repositories.edges.map((edge: any) => ({
       ...edge.node,
       contributions: {
@@ -89,6 +112,43 @@ export const fetchAllRepositories = async (username: string, token: string) => {
     repositories = [...repositories, ...fetchedRepos];
     hasNextPage = result.user.repositories.pageInfo.hasNextPage;
     endCursor = result.user.repositories.pageInfo.endCursor;
+  }
+
+  // Fetch all commits for each repository
+  for (let repo of repositories) {
+    let allCommits:any = [];
+    let commitsHasNextPage = true;
+    let commitsEndCursor = null;
+
+    while (commitsHasNextPage) {
+      const result = await graphqlClient(
+        queryCommits,
+        { owner: repo.owner.login, name: repo.name, after: commitsEndCursor },
+        token
+      );
+      const history = result.repository.defaultBranchRef.target.history;
+      const commits = history.edges.map((edge: any) => edge.node);
+      allCommits = [...allCommits, ...commits];
+      commitsHasNextPage = history.pageInfo.hasNextPage;
+      commitsEndCursor = history.pageInfo.endCursor;
+    }
+
+    // Group commits by date and count the number of commits per date
+    const commitsGroupedByDate = allCommits.reduce((acc:any, commit:any) => {
+      const date = commit.committedDate.split("T")[0];
+      if (!acc[date]) {
+        acc[date] = 0;
+      }
+      acc[date] += 1;
+      return acc;
+    }, {});
+
+    // Transform grouped commits into the desired format
+    const commitsArray = Object.entries(commitsGroupedByDate).map(
+      ([date, count]) => ({ date, count })
+    );
+
+    repo.allCommits = commitsArray;
   }
 
   return repositories;
