@@ -2,6 +2,7 @@ import { ForkOutlined } from "@ant-design/icons";
 import { Tooltip, Card as AntdCard, Progress, ProgressProps } from "antd";
 import React from "react";
 import { analyzeCommitFrequency } from "../RepoHealth/CommitFrequency";
+import { calculateRepoHealth } from "../RepoHealth/RepoHealth";
 
 const Card = ({ repo }: any) => {
   const twoColors: ProgressProps["strokeColor"] = {
@@ -34,9 +35,7 @@ const Card = ({ repo }: any) => {
 
               <Progress
                 type="dashboard"
-                percent={Number(
-                  (analyzeCommitFrequency(repo.allCommits) * 10).toFixed(2)
-                )}
+                percent={Number(calculateRepoHealth(repo).totalHealthScore)}
                 strokeColor={twoColors}
                 size={40}
               />
