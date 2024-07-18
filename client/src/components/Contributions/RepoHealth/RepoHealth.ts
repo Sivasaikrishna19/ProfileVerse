@@ -10,14 +10,14 @@ export const calculateRepoHealth = (repo: any) => {
   const commitFrequencyScore = analyzeCommitFrequency(repo.allCommits);
 
   // Assuming equal weightage for both aspects
-  const readmeWeight = 0.5;
-  const commitFrequencyWeight = 0.5;
+  const readmeWeight = 0.3;
+  const commitFrequencyWeight = 0.7;
 
   const totalHealthScore = (readmeScore * readmeWeight) + (commitFrequencyScore * commitFrequencyWeight);
 
   return {
     readmeScore,
     commitFrequencyScore,
-    totalHealthScore: (totalHealthScore * 10).toFixed(2),
+    totalHealthScore: parseInt((totalHealthScore * 10).toFixed(2)),
   };
 };
