@@ -6,7 +6,7 @@ const Page = () => {
       {process.env.NODE_ENV === "production" ? (
         <div className="text-center">
           <div className="animate-pulse">
-            <div className="text-4xl font-bold">Work in Progress</div>
+            <div className="text-4xl font-bold">Coming Soon...</div>
             {/* <div className="mt-2 text-xl">
               We are building something amazing!
             </div> */}
@@ -15,7 +15,7 @@ const Page = () => {
       ) : (
         <div className="text-center">
           <div className="animate-pulse">
-            <div className="text-4xl font-bold">Work in Progress</div>
+            <div className="text-4xl font-bold">Coming Soon...</div>
             {/* <div className="mt-2 text-xl">
               We are building something amazing!
             </div> */}
