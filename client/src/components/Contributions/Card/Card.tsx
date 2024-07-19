@@ -53,6 +53,16 @@ const Card = ({ repo }: any) => {
           </p>
         </div>
         <div>
+          <div className="mb-2 flex justify-between">
+            <div>
+              <span className="font-semibold">Language: </span>
+              {repo.primaryLanguage ? repo.primaryLanguage.name : "N/A"}
+            </div>
+            <div className="text-blue-500">
+              <span className="font-semibold">Contributions: </span>
+              {repo.contributions.totalCount}
+            </div>
+          </div>
           <div className="flex justify-between mt-2">
             <div>
               <span className="font-semibold">Stars: </span>
@@ -67,16 +77,7 @@ const Card = ({ repo }: any) => {
               {repo.issues.totalCount || 0}
             </div>
           </div>
-          <div className="mt-2 flex justify-between">
-            <div>
-              <span className="font-semibold">Language: </span>
-              {repo.primaryLanguage ? repo.primaryLanguage.name : "N/A"}
-            </div>
-            <div>
-              <span className="font-semibold">Contributions: </span>
-              {repo.contributions.totalCount}
-            </div>
-          </div>
+
           <div className="flex justify-between mt-2">
             <Tooltip
               title={`Created at: ${new Date(

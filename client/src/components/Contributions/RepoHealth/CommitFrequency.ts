@@ -37,7 +37,7 @@ const commits = [
     );
 
     // Commit density (average commits per month)
-    const commitDensity = totalCommits / totalMonths;
+    const commitDensity = totalMonths>4? totalCommits / totalMonths : 0;
 
     // Regularity (number of active months)
     const activeMonths = Object.keys(commitsByMonth).length;
@@ -56,15 +56,27 @@ const commits = [
     let score = 0;
 
     // Total commits contribution
-    score += Math.min(totalCommits / 10, 5);
 
-    // Commit density contribution
-    if (commitDensity >= 10) {
+
+    if (totalCommits >= 25) {
       score += 5;
-    } else if (commitDensity >= 5) {
+    } else if (totalCommits>= 10) {
       score += 3;
     } else {
+      score += 0;
+    }
+
+    // Commit density contribution
+    if (commitDensity >= 20) {
+      score += 6;
+    } else if (commitDensity >= 10) {
+      score += 3;
+    } else if(commitDensity >=5){
       score += 1;
+    } else if(commitDensity >=0.5){
+      score += 0.5;
+    }else {
+      score +=0;
     }
 
     // Regularity contribution
