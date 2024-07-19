@@ -120,7 +120,7 @@ const Page = () => {
       {token ? (
         <div className="w-full">
           <Search
-            placeholder="Search for profile..."
+            placeholder="Enter GitHub username to explore..."
             // allowClear
             enterButton="Search"
             value={username!}

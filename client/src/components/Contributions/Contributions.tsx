@@ -10,6 +10,7 @@ import CountUp from "react-countup";
 import OwnContributions from "./Tabs/OwnContributions";
 import OpenSourceContributions from "./Tabs/OpenSourceContributions";
 import CommitHeatmap from "../CommitHeatmap";
+import { calculateRepoHealth } from "./RepoHealth/RepoHealth";
 
 const Contributions = () => {
   const { profileSummary }: any = useSelector(
@@ -68,6 +69,13 @@ const Contributions = () => {
         break;
       case "stars":
         sortedRepos = repos.sort((a, b) => b.stargazerCount - a.stargazerCount);
+        break;
+      case "repoHealth":
+        sortedRepos = repos.sort(
+          (a, b) =>
+            calculateRepoHealth(b).totalHealthScore -
+            calculateRepoHealth(a).totalHealthScore
+        );
         break;
       case "lastUpdated":
       default:
@@ -241,7 +249,7 @@ const Contributions = () => {
       <CommitHeatmap />
       <div className="p-2 w-full">
         <div className="flex flex-col sm:flex-row items-center mb-4 gap-4 w-full">
-          <div className="w-full sm:w-1/3">
+          <div className="w-full sm:w-1/2">
             <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
               Sort By
             </label>
@@ -254,26 +262,11 @@ const Contributions = () => {
                 { value: "contributions", label: "Contributions" },
                 { value: "name", label: "Name" },
                 { value: "stars", label: "Stars" },
+                { value: "repoHealth", label: "Repo Health" },
               ]}
             />
           </div>
-          <div className="w-full sm:w-1/3">
-            <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
-              Repo Health
-            </label>
-            <Select
-              defaultValue="all"
-              style={{ width: "100%" }}
-              //   onChange={handleChange}
-              options={[
-                { value: "all", label: "All" },
-                { value: "excellent", label: "Excellent" },
-                { value: "good", label: "Good" },
-                { value: "poor", label: "Poor" },
-              ]}
-            />
-          </div>
-          <div className="w-full sm:w-1/3">
+          <div className="w-full sm:w-1/2">
             <label className="block mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-700">
               Language
             </label>
