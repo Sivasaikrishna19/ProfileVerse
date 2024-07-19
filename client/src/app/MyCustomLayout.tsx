@@ -31,7 +31,7 @@ export default function MyCustomLayout({
         {
           key: "2",
           icon: <LinkedinOutlined />,
-          label: <Link href="/linkedin">LinkedIn</Link>,
+          label: <Link href="/linkedin">LinkedInLens</Link>,
         },
       ]
     : [
@@ -39,6 +39,11 @@ export default function MyCustomLayout({
           key: "1",
           icon: <GithubOutlined />,
           label: <Link href="/github">GitInsight</Link>,
+        },
+        {
+          key: "2",
+          icon: <LinkedinOutlined />,
+          label: <Link href="/linkedin">LinkedInLens</Link>,
         },
       ];
   const {

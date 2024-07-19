@@ -84,3 +84,19 @@
 @keyframes l17 { 
   100%{transform: rotate(1turn)}
 }
+
+/* Add this CSS to your global stylesheet */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
