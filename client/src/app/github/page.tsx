@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Button, FloatButton, Spin } from "antd";
+import { Button, FloatButton, Spin, message } from "antd";
 import Search from "antd/es/input/Search";
 import { fetchRepositories, fetchUserData } from "@/utils/api";
 import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
@@ -61,16 +61,19 @@ const Page = () => {
   ];
 
   const onSearch = async () => {
-    if (username == "" || !username) {
+    if (username === "" || !username) {
       dispatch(setProfileSummary({} as IProfileSummary));
       dispatch(setRepositories([]));
+      setUserData({} as IProfileSummary);
+      return;
     }
     setLoading(true);
-    let tempUserData: IProfileSummary;
-    let tempRepos: IRepository[];
-    if (username) {
-      if (token) {
+    try {
+      let tempUserData: IProfileSummary;
+      let tempRepos: IRepository[];
+      if (username && token) {
         tempUserData = await fetchUserData(username, token);
+
         tempRepos = await fetchRepositories(username, token);
         const tempLangStats = await fetchUserLanguages(username, token);
         const filteredLangStats = tempLangStats.filter((lang: any) =>
@@ -81,17 +84,20 @@ const Page = () => {
         dispatch(setProfileSummary(tempUserData));
         setUserData(tempUserData);
       }
+    } catch (error: any) {
+      console.log(error);
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (username == "" || !username) {
+    if (username === "" || !username) {
       dispatch(setProfileSummary({} as IProfileSummary));
       dispatch(setRepositories([]));
       setUserData({} as IProfileSummary);
     }
-  }, [username]);
+  }, [username, dispatch]);
 
   const client_id =
     process.env.NODE_ENV === "production"
@@ -124,8 +130,11 @@ const Page = () => {
             onChange={(e: any) => setUsername(e.target.value)}
           />
           {loading ? (
-            <div className="w-full flex justify-center mt-6">
-              <Spin tip="Loading..." size="large" />
+            <div className="w-full flex flex-col justify-center mt-6 items-center m-auto">
+              <div className="loader"></div>
+              <div className="text-[16px] text-blue-400">
+                Fetching user profile...
+              </div>
             </div>
           ) : (
             userData?.login && (
