@@ -4,18 +4,18 @@ import Cookies from "js-cookie";
 import { Button, FloatButton, Spin, message } from "antd";
 import Search from "antd/es/input/Search";
 import { fetchRepositories, fetchUserData } from "@/utils/api";
-import ProfileSummary from "@/components/ProfileSummary/ProfileSummary";
+import ProfileSummary from "@/components/github/ProfileSummary/ProfileSummary";
 import { useDispatch } from "react-redux";
 import {
   setProfileSummary,
   setRepositories,
 } from "@/store/slices/profileSummary";
-import LanguagesSummary from "@/components/LanguagesSummary/LanguagesSummary";
+import LanguagesSummary from "@/components/github/LanguagesSummary/LanguagesSummary";
 import { setAccessToken } from "@/store/slices/authentication";
 import { IProfileSummary } from "@/interfaces/profileSummary.interface";
 import { fetchUserLanguages } from "@/graphql/queries/languages";
 import { IRepository } from "@/interfaces/repo.interface";
-import Contributions from "@/components/Contributions/Contributions";
+import Contributions from "@/components/github/Contributions/Contributions";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -106,8 +106,8 @@ const Page = () => {
 
   const redirect_uri =
     process.env.NODE_ENV === "production"
-      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
-      : `${process.env.NEXT_PUBLIC_DEV_URL}`;
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}`
+      : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
 
   const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user,repo`;
 
@@ -159,7 +159,12 @@ const Page = () => {
           <Button
             type="primary"
             className="w-full"
-            onClick={() => (window.location.href = oauthUrl)}
+            onClick={() => {
+              {
+                console.log(oauthUrl);
+                window.location.href = oauthUrl;
+              }
+            }}
           >
             Authorize with GitHub
           </Button>

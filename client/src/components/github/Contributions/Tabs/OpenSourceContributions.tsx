@@ -2,13 +2,14 @@
 
 import React from "react";
 import { Badge } from "antd";
-import moment from "moment";
-import Card from "../Card/Card";
 
-const OwnContributions = ({
-  ownReposContributions,
+import moment from "moment";
+import Card from "../../Card/Card";
+
+const OpenSourceContributions = ({
+  openSourceContributions,
 }: {
-  ownReposContributions: any[];
+  openSourceContributions: any[];
 }) => {
   const getActivityStatus = (updatedAt: string) => {
     const lastUpdated = moment(updatedAt);
@@ -23,11 +24,14 @@ const OwnContributions = ({
     }
   };
 
+  console.log("Open source contributions: ", openSourceContributions);
+
   return (
     <div>
+      {/* <h3 className="text-xl font-semibold mb-2">Other Repositories</h3> */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {ownReposContributions?.length > 0 ? (
-          ownReposContributions.map((repo: any) => {
+        {openSourceContributions?.length > 0 ? (
+          openSourceContributions.map((repo: any) => {
             const activity = getActivityStatus(repo.updatedAt);
             return (
               <Badge.Ribbon
@@ -41,11 +45,11 @@ const OwnContributions = ({
             );
           })
         ) : (
-          <p>No contributions to own repositories.</p>
+          <p>No contributions to other repositories.</p>
         )}
       </div>
     </div>
   );
 };
 
-export default OwnContributions;
+export default OpenSourceContributions;

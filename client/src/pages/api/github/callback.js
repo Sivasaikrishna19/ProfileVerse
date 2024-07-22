@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   const { code } = req.query;
+  console.log(code,"code")
 
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
@@ -9,8 +10,8 @@ export default async function handler(req, res) {
 
   const redirect_uri =
     process.env.NODE_ENV === 'production'
-      ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
-      : `${process.env.NEXT_PUBLIC_DEV_URL}`;
+      ? `${process.env.NEXT_PUBLIC_PROD_URL}`
+      : `${process.env.NEXT_PUBLIC_DEV_URL}/api/github/callback`;
 
   const client_id =
       process.env.NODE_ENV === 'production'

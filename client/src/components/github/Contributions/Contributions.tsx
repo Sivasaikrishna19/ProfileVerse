@@ -9,8 +9,8 @@ import Cookies from "js-cookie";
 import CountUp from "react-countup";
 import OwnContributions from "./Tabs/OwnContributions";
 import OpenSourceContributions from "./Tabs/OpenSourceContributions";
-import CommitHeatmap from "../CommitHeatmap";
-import { calculateRepoHealth } from "./RepoHealth/RepoHealth";
+import CommitHeatmap from "../CommitHeatmap/CommitHeatmap";
+import { calculateRepoHealth } from "../RepoHealth/RepoHealth";
 
 const Contributions = () => {
   const { profileSummary }: any = useSelector(
