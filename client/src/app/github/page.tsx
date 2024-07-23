@@ -161,7 +161,6 @@ const Page = () => {
             className="w-full"
             onClick={() => {
               {
-                console.log(oauthUrl);
                 window.location.href = oauthUrl;
               }
             }}

@@ -26,12 +26,3 @@ export const fetchRepositories = async (username: string, token: string) => {
   }
 };
 
-// export const fetchUserContributions = async (username: string, token: string) => {
-//   try {
-//     const contributions = await fetchContributions(username, token);
-//     // console.log('contributions: ',contributions);
-//     return contributions;
-//   } catch (error) {
-//     console.error('Error fetching contributions:', error);
-//   }
-// };

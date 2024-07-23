@@ -110,7 +110,6 @@ const commits = [
 
   // Example usage
   const commitFrequencyScore = analyzeCommitFrequency(commits);
-  console.log(`Commit Frequency Score: ${commitFrequencyScore}`);
 
 
 

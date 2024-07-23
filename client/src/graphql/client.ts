@@ -18,8 +18,7 @@ export const graphqlClient = async (query: string, variables: any, token: string
       },
       { headers }
     );
-    // if(message=='contributions')
-    //   console.log(variables,'response data: ',response.data.data,'message: ',message)
+
     return response.data.data;
   } catch (error) {
     console.error('Error making GraphQL request:', error);

@@ -26,11 +26,16 @@ const Page = () => {
   const linkedinAuthUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=openid%20profile%20w_member_social%20email`;
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">LinkedInLens</h1>
-      <p className="text-lg mb-6 text-center">
-        Discover top talent through LinkedIn profiles with ease
-      </p>
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center w-full text-center mb-6">
+        <div className="text-[32px] sm:text-[36px] md:text-[40px] lg:text-[44px] font-extrabold ">
+          Universe <span className="text-blue-500">LinkedInLens</span>
+        </div>
+        <div className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] mt-2 text-gray-700">
+          Discover top talent through LinkedIn profiles with ease
+        </div>
+        <div className="mt-4 w-2/3 sm:w-1/2 md:w-1/3 lg:w-1/4 h-1 bg-blue-500 rounded-full"></div>
+      </div>
       {token ? (
         <div className="w-full">
           <Search
@@ -48,7 +53,6 @@ const Page = () => {
             type="primary"
             className="w-full"
             onClick={() => {
-              // console.log(linkedinAuthUrl, "OAuth");
               window.location.href = linkedinAuthUrl;
             }}
           >
