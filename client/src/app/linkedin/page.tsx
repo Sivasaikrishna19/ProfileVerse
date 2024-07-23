@@ -22,6 +22,7 @@ const Page = () => {
 
   const client_id = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
   const redirect_uri = process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI;
+  console.log(process.env, " :", client_id);
 
   const linkedinAuthUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=openid%20profile%20w_member_social%20email`;
 
@@ -53,6 +54,7 @@ const Page = () => {
             type="primary"
             className="w-full"
             onClick={() => {
+              console.log(linkedinAuthUrl, process.env);
               window.location.href = linkedinAuthUrl;
             }}
           >
