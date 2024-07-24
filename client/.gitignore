@@ -8,7 +8,7 @@
 
 # Environment Variables
 .env.local
-.env.production
+# .env.production
 # testing
 /coverage
 
