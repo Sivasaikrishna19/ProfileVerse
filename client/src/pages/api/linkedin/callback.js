@@ -8,9 +8,22 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'No code provided' });
   }
 
-  const redirect_uri = process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI;
-  const client_id = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-  const client_secret = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET;
+  const client_id =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID_PROD
+      : process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
+
+  const redirect_uri =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI_PROD
+      : process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI;
+
+  const client_secret =
+    process.env.NODE_ENV === 'production'
+      ? process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET_PROD
+      : process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET;
+
+    
 
   try {
     const response = await axios.post(
