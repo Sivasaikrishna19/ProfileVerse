@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserState } from "@/store/slices/profileSummary";
-import { fetchRepositories } from "@/utils/api";
+import { fetchRepositories } from "@/utils/github/api";
 import { Statistic, StatisticProps, TabsProps, Tabs, Select, Spin } from "antd";
 import Cookies from "js-cookie";
 import CountUp from "react-countup";

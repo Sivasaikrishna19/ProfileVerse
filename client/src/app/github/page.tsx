@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button, FloatButton, Spin, message } from "antd";
 import Search from "antd/es/input/Search";
-import { fetchRepositories, fetchUserData } from "@/utils/api";
+import { fetchRepositories, fetchUserData } from "@/utils/github/api";
 import ProfileSummary from "@/components/github/ProfileSummary/ProfileSummary";
 import { useDispatch } from "react-redux";
 import {

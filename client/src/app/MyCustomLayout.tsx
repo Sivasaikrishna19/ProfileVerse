@@ -28,11 +28,11 @@ export default function MyCustomLayout({
           icon: <GithubOutlined />,
           label: <Link href="/github">GitInsight</Link>,
         },
-        {
-          key: "2",
-          icon: <LinkedinOutlined />,
-          label: <Link href="/linkedin">LinkedInLens</Link>,
-        },
+        // {
+        //   key: "2",
+        //   icon: <LinkedinOutlined />,
+        //   label: <Link href="/linkedin">LinkedInLens</Link>,
+        // },
       ]
     : [
         {
@@ -40,11 +40,11 @@ export default function MyCustomLayout({
           icon: <GithubOutlined />,
           label: <Link href="/github">GitInsight</Link>,
         },
-        {
-          key: "2",
-          icon: <LinkedinOutlined />,
-          label: <Link href="/linkedin">LinkedInLens</Link>,
-        },
+        // {
+        //   key: "2",
+        //   icon: <LinkedinOutlined />,
+        //   label: <Link href="/linkedin">LinkedInLens</Link>,
+        // },
       ];
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -83,8 +83,42 @@ export default function MyCustomLayout({
             {children}
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Created by ©<b>NSSK</b>
+        <Footer
+          style={{
+            textAlign: "center",
+            backgroundColor: "#f0f2f5",
+            padding: "20px 0",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              Created by ©<b>NSSK</b>
+            </div>
+            <div style={{ marginLeft: "20px", display: "flex", gap: "20px" }}>
+              <a
+                href="https://github.com/sivasaikrishna19"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "20px" }}
+              >
+                <GithubOutlined />
+              </a>
+              <a
+                href="https://linkedin.com/in/nssk"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: "20px" }}
+              >
+                <LinkedinOutlined />
+              </a>
+            </div>
+          </div>
         </Footer>
       </Layout>
     </Layout>

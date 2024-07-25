@@ -16,7 +16,7 @@ export default function Home() {
             Welcome to ProfileVerse
           </h1>
           <p className="text-xl mb-8 text-center px-4">
-            Effortlessly evaluate candidate profiles from GitHub and LinkedIn.
+            Effortlessly evaluate candidate profiles.
           </p>
           <div className="flex space-x-8">
             <div
@@ -28,7 +28,7 @@ export default function Home() {
                 style={{ color: "#333" }}
               />
             </div>
-            {
+            {/* {
               <div
                 className="flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 bg-white rounded-full shadow-lg cursor-pointer hover:shadow-2xl transition duration-300 ease-in-out"
                 onClick={() => router.push("/linkedin")}
@@ -38,7 +38,7 @@ export default function Home() {
                   style={{ color: "#0077B5" }}
                 />
               </div>
-            }
+            } */}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { fetchUserMetaData } from '@/graphql/queries/profileSummary';
 import { fetchAllRepositories } from '@/graphql/queries/repositories';
 import { message } from 'antd';
-// import { fetchContributions } from '@/graphql/queries/contributions';
+
 
 export const fetchUserData = async (username: string, token: string) => {
   try {
