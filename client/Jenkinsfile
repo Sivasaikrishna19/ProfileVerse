@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // Use the configured Node.js installation name
-        nodejs 'nodejs'
+        nodejs 'nodejs' // Ensure this matches the configured Node.js tool in Jenkins
     }
 
     stages {
@@ -15,13 +14,17 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                dir('client') { // Navigate to the client directory
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Build Application') {
             steps {
-                sh 'npm run build'
+                dir('client') { // Navigate to the client directory
+                    sh 'npm run build'
+                }
             }
         }
     }
