@@ -25,13 +25,6 @@ const Page = () => {
       ? process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID_PROD
       : process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
 
-  const redirect_uri =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI_PROD
-      : process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI;
-
-  const linkedinAuthUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=openid%20profile%20w_member_social%20email`;
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center w-full text-center mb-6">
@@ -56,14 +49,7 @@ const Page = () => {
         </div>
       ) : (
         <div className="w-[80%] m-auto flex justify-center">
-          <Button
-            type="primary"
-            className="w-full"
-            onClick={() => {
-              console.log(linkedinAuthUrl, process.env);
-              window.location.href = linkedinAuthUrl;
-            }}
-          >
+          <Button type="primary" className="w-full">
             Authorize with LinkedIn
           </Button>
         </div>

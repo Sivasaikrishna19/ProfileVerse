@@ -1,6 +1,10 @@
 "use client";
-import { GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import {
+  GithubOutlined,
+  LinkedinOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
 import React from "react";
 import "antd/dist/reset.css";
 
@@ -62,6 +66,18 @@ export default function MyCustomLayout({
         >
           ProfileVerse
         </div>
+        <div className="w-full p-4 flex items-center justify-center">
+          <Button
+            className="w-full"
+            onClick={() => {
+              navigateToPage("/batches");
+            }}
+          >
+            <PlusSquareOutlined />
+            New Bactch
+          </Button>
+        </div>
+
         <Menu
           theme="dark"
           mode="inline"

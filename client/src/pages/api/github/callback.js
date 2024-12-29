@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const redirect_uri =
     process.env.NODE_ENV === 'production'
       ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
-      : `${process.env.NEXT_PUBLIC_DEV_URL}`;
+      : `${process.env.NEXT_PUBLIC_DEV_URL}api/github/callback`;
 
   const client_id =
       process.env.NODE_ENV === 'production'
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
     const { access_token } = response.data;
 
-
+    console.log(access_token,"access token")
     if (access_token) {
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);
       res.redirect('/github');
