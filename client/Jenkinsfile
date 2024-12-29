@@ -2,28 +2,25 @@ pipeline {
     agent any
 
     tools {
-        // Define Node.js version if installed via Jenkins Global Tool Configuration
+        // Use the configured Node.js installation name
         nodejs 'nodejs'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                // Checkout the source code from the repository
-                git branch: 'main', url: 'https://github.com/Sivasaikrishna19/ProfileVerse'
+                git branch: 'main', url: 'https://github.com/Sivasaikrishna19/ProfileVerse.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Install project dependencies using npm
                 sh 'npm install'
             }
         }
 
         stage('Build Application') {
             steps {
-                // Build the Next.js application
                 sh 'npm run build'
             }
         }
