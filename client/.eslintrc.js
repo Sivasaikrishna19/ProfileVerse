@@ -32,7 +32,7 @@ module.exports = {
         },
       ],
       'no-unused-vars': 'off', // Disable base rule for unused variables
-      '@typescript-eslint/no-explicit-any': 'off', // Disable "no-explicit-any" rule
+    //   '@typescript-eslint/no-explicit-any': 'off', // Disable "no-explicit-any" rule
       'react/react-in-jsx-scope': 'off', // Not required for React 17+
     },
     settings: {
