@@ -1,6 +1,6 @@
-import React from "react";
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import React from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -9,36 +9,36 @@ interface PieChartProps {
 }
 
 const predefinedColors = [
-  "#FF6384",
-  "#36A2EB",
-  "#FFCE56",
-  "#4BC0C0",
-  "#9966FF",
-  "#FF9F40",
-  "#C9CBCF",
-  "#FF99C8",
-  "#FFCC99",
-  "#A6D8FF",
-  "#B2BEB5",
-  "#FFD700",
-  "#ADFF2F",
-  "#FF6347",
-  "#40E0D0",
-  "#EE82EE",
-  "#FA8072",
-  "#FF4500",
-  "#DA70D6",
-  "#BDB76B",
-  "#7B68EE",
-  "#6B8E23",
-  "#4682B4",
-  "#D2691E",
-  "#9ACD32",
-  "#00CED1",
-  "#8A2BE2",
-  "#FF00FF",
-  "#1E90FF",
-  "#FF1493",
+  '#FF6384',
+  '#36A2EB',
+  '#FFCE56',
+  '#4BC0C0',
+  '#9966FF',
+  '#FF9F40',
+  '#C9CBCF',
+  '#FF99C8',
+  '#FFCC99',
+  '#A6D8FF',
+  '#B2BEB5',
+  '#FFD700',
+  '#ADFF2F',
+  '#FF6347',
+  '#40E0D0',
+  '#EE82EE',
+  '#FA8072',
+  '#FF4500',
+  '#DA70D6',
+  '#BDB76B',
+  '#7B68EE',
+  '#6B8E23',
+  '#4682B4',
+  '#D2691E',
+  '#9ACD32',
+  '#00CED1',
+  '#8A2BE2',
+  '#FF00FF',
+  '#1E90FF',
+  '#FF1493',
 ];
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
@@ -52,7 +52,7 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
     labels: data.map((item) => `${item.language}`),
     datasets: [
       {
-        label: "Languages",
+        label: 'Languages',
         data: data.map((item) => item.bytes),
         backgroundColor: data.map((_, index) => getColor(index)),
         hoverBackgroundColor: data.map((_, index) => getColor(index)),
@@ -65,7 +65,7 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "right",
+        position: 'right',
         labels: {
           generateLabels: (chart: any) => {
             const data = chart.data;
@@ -80,13 +80,13 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
                 text: `${label} (${percentage}%)`,
                 fillStyle: dataset.backgroundColor[index],
                 hidden: false,
-                lineCap: "butt",
+                lineCap: 'butt',
                 lineDash: [],
                 lineDashOffset: 0,
-                lineJoin: "miter",
+                lineJoin: 'miter',
                 lineWidth: 1,
                 strokeStyle: dataset.borderColor,
-                pointStyle: "circle",
+                pointStyle: 'circle',
                 rotation: 0,
               };
             });
@@ -106,7 +106,7 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "400px" }}>
+    <div style={{ position: 'relative', width: '100%', height: '400px' }}>
       <Pie data={chartData} options={options} />
     </div>
   );

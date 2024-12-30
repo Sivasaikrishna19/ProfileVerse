@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       : process.env.GITHUB_CLIENT_SECRET_DEV;
 
   try {
-    console.log('Hit!')
+    console.log('Hit!');
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
     const { access_token } = response.data;
 
-    console.log(access_token,"access token")
+    console.log(access_token,'access token');
     if (access_token) {
       res.setHeader('Set-Cookie', `access_token=${access_token}; Path=/`);
       res.redirect('/github');

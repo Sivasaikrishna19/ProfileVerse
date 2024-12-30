@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState } from 'react';
 import {
   Layout,
   Form,
@@ -10,8 +10,8 @@ import {
   Modal,
   Progress,
   message,
-} from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+} from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -31,7 +31,7 @@ const Page = () => {
 
   const handleFormSubmit = (values: any) => {
     if (!fileList.length) {
-      message.error("Please upload at least one resume.");
+      message.error('Please upload at least one resume.');
       return;
     }
 
@@ -52,15 +52,15 @@ const Page = () => {
         setIsModalVisible(false);
         setFileList([]); // Clear file list after upload
         setSelectedFileCount(0); // Reset file count after upload
-        message.success("All resumes uploaded successfully!");
+        message.success('All resumes uploaded successfully!');
       }
     }, 1000); // Simulate each file upload taking 1 second
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", padding: "20px" }}>
+    <Layout style={{ minHeight: '100vh', padding: '20px' }}>
       <Content>
-        <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <Title level={2}>Upload Resumes for Job Posting</Title>
           <Text type="secondary">
             Enter the job description and upload resumes in bulk for analysis.
@@ -75,7 +75,7 @@ const Page = () => {
               label="Job Description"
               name="jobDescription"
               rules={[
-                { required: true, message: "Please enter a job description." },
+                { required: true, message: 'Please enter a job description.' },
               ]}
             >
               <TextArea
@@ -104,7 +104,7 @@ const Page = () => {
               {/* Counter for selected files */}
               <div style={{ marginTop: 10 }}>
                 <Text>
-                  {selectedFileCount} /{" "}
+                  {selectedFileCount} /{' '}
                   {selectedFileCount > 1 ? selectedFileCount : 0} resumes
                   selected
                 </Text>

@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Avatar, Statistic, StatisticProps } from "antd";
-import React from "react";
-import { useSelector } from "react-redux";
-import CountUp from "react-countup";
-import { UserState } from "@/store/slices/profileSummary";
+import { Avatar, Statistic, StatisticProps } from 'antd';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import CountUp from 'react-countup';
+import { UserState } from '@/store/slices/profileSummary';
 
 const ProfileSummary = () => {
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
-  const formatter: StatisticProps["formatter"] = (value) => (
+  const formatter: StatisticProps['formatter'] = (value) => (
     <CountUp end={value as number} separator="," />
   );
 

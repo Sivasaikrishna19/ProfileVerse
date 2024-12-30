@@ -2,15 +2,15 @@
 
 
 const commits = [
-    { date: "2023-06-15", count: 3 },
-    { date: "2023-06-10", count: 1 },
-    { date: "2023-05-05", count: 2 },
-    { date: "2023-04-25", count: 1 },
-    { date: "2023-04-20", count: 1 },
-    { date: "2023-03-15", count: 2 },
-    { date: "2022-12-10", count: 1 },
-    { date: "2022-10-05", count: 3 },
-    { date: "2022-08-15", count: 1 },
+    { date: '2023-06-15', count: 3 },
+    { date: '2023-06-10', count: 1 },
+    { date: '2023-05-05', count: 2 },
+    { date: '2023-04-25', count: 1 },
+    { date: '2023-04-20', count: 1 },
+    { date: '2023-03-15', count: 2 },
+    { date: '2022-12-10', count: 1 },
+    { date: '2022-10-05', count: 3 },
+    { date: '2022-08-15', count: 1 },
   ];
   export const analyzeCommitFrequency = (commits: any) => {
     if (commits.length === 0) return 0;

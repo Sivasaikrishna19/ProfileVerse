@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Badge } from "antd";
+import React from 'react';
+import { Badge } from 'antd';
 
-import moment from "moment";
-import Card from "../../Card/Card";
+import moment from 'moment';
+import Card from '../../Card/Card';
 
 const OpenSourceContributions = ({
   openSourceContributions,
@@ -15,16 +15,16 @@ const OpenSourceContributions = ({
     const lastUpdated = moment(updatedAt);
     const now = moment();
 
-    if (now.diff(lastUpdated, "months") <= 1) {
-      return { status: "Recently Active", color: "green" };
-    } else if (now.diff(lastUpdated, "months") <= 6) {
-      return { status: "Moderately Active", color: "orange" };
+    if (now.diff(lastUpdated, 'months') <= 1) {
+      return { status: 'Recently Active', color: 'green' };
+    } else if (now.diff(lastUpdated, 'months') <= 6) {
+      return { status: 'Moderately Active', color: 'orange' };
     } else {
-      return { status: "Inactive", color: "red" };
+      return { status: 'Inactive', color: 'red' };
     }
   };
 
-  console.log("Open source contributions: ", openSourceContributions);
+  console.log('Open source contributions: ', openSourceContributions);
 
   return (
     <div>

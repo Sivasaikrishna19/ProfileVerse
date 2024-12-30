@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import CalendarHeatmap from "react-calendar-heatmap";
-import "react-calendar-heatmap/dist/styles.css";
-import { useSelector } from "react-redux";
-import { UserState } from "@/store/slices/profileSummary";
-import Cookies from "js-cookie";
-import { Select, Spin } from "antd";
-import { fetchUserCommitHistory } from "@/graphql/queries/commitHistory";
+import React, { useEffect, useState } from 'react';
+import CalendarHeatmap from 'react-calendar-heatmap';
+import 'react-calendar-heatmap/dist/styles.css';
+import { useSelector } from 'react-redux';
+import { UserState } from '@/store/slices/profileSummary';
+import Cookies from 'js-cookie';
+import { Select, Spin } from 'antd';
+import { fetchUserCommitHistory } from '@/graphql/queries/commitHistory';
 
 const { Option } = Select;
 
@@ -22,7 +22,7 @@ const CommitHeatmap = () => {
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
-  const accessToken: string | undefined = Cookies.get("access_token");
+  const accessToken: string | undefined = Cookies.get('access_token');
 
   const fetchData = async (year: number) => {
     setLoading(true);
@@ -57,10 +57,10 @@ const CommitHeatmap = () => {
         })
       );
 
-      console.log("commit activity", heatmapData);
+      console.log('commit activity', heatmapData);
       setCommitActivity(heatmapData);
     } catch (error) {
-      console.error("Error fetching commit activities:", error);
+      console.error('Error fetching commit activities:', error);
     } finally {
       setLoading(false);
     }
@@ -87,12 +87,12 @@ const CommitHeatmap = () => {
 
           fetchData(selectedYear);
         } catch (error) {
-          console.error("Error fetching initial data:", error);
+          console.error('Error fetching initial data:', error);
         }
       }
     };
     fetchInitialData();
-  }, [profileSummary.login, profileSummary.createdAt]);
+  }, [profileSummary.login, profileSummary.createdAt, selectedYear]);
 
   return (
     <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4 overflow-y-auto">
@@ -110,7 +110,7 @@ const CommitHeatmap = () => {
         </Select>
         {!loading && (
           <div className="text-center mt-2">
-            {commitActivity.reduce((acc, { count }) => acc + count, 0)}{" "}
+            {commitActivity.reduce((acc, { count }) => acc + count, 0)}{' '}
             Contributions in {selectedYear}
           </div>
         )}
@@ -127,13 +127,13 @@ const CommitHeatmap = () => {
             values={commitActivity}
             classForValue={(value) => {
               if (!value) {
-                return "color-empty";
+                return 'color-empty';
               }
               return `color-github-${Math.min(value.count, 4)}`;
             }}
             tooltipDataAttrs={(value: any) => ({
-              "data-tip": `${value.date}: ${value.count} commits ${
-                value.isPrivate ? "(Private)" : ""
+              'data-tip': `${value.date}: ${value.count} commits ${
+                value.isPrivate ? '(Private)' : ''
               }`,
             })}
           />

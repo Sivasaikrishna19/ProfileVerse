@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import PieChart from "../PieChart/PieChart";
+'use client';
+import React from 'react';
+import PieChart from '../PieChart/PieChart';
 const LanguagesSummary = ({ languages }: any) => {
   return (
     <div className="bg-[#d4e7fa] p-4 rounded-md shadow-mg mt-4  overflow-y-auto">

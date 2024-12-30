@@ -1,11 +1,11 @@
-import { analyzeCommitFrequency } from "./CommitFrequency";
-import { calculateMetaDataScore } from "./MetaData";
-import { calculateReadmeScore } from "./ReadmeQuality";
+import { analyzeCommitFrequency } from './CommitFrequency';
+import { calculateMetaDataScore } from './MetaData';
+import { calculateReadmeScore } from './ReadmeQuality';
 
 
 
 export const calculateRepoHealth = (repo: any) => {
-  const readmeContent = repo.object?.text || "";
+  const readmeContent = repo.object?.text || '';
   const readmeScore :any= calculateReadmeScore(readmeContent);
 
   const commitFrequencyScore = analyzeCommitFrequency(repo.allCommits);
@@ -17,7 +17,7 @@ export const calculateRepoHealth = (repo: any) => {
   const commitFrequencyWeight = 0.6;
   const metaDataWeight = 0.1;
 
-  const totalHealthScore = (readmeScore * readmeWeight) + (commitFrequencyScore * commitFrequencyWeight)  
+  const totalHealthScore = (readmeScore * readmeWeight) + (commitFrequencyScore * commitFrequencyWeight);  
 //   +(metaDataScore * metaDataWeight)
 
   return {

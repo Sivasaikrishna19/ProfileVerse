@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { Button, Spin } from "antd";
-import Search from "antd/es/input/Search";
-import { useDispatch } from "react-redux";
-import { setAccessToken } from "@/store/slices/authentication";
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { Button, Spin } from 'antd';
+import Search from 'antd/es/input/Search';
+import { useDispatch } from 'react-redux';
+import { setAccessToken } from '@/store/slices/authentication';
 
 const Page = () => {
   const dispatch = useDispatch();
-  const [token, setToken] = useState<string | undefined>("");
+  const [token, setToken] = useState<string | undefined>('');
 
   useEffect(() => {
-    const tempToken: string | undefined = Cookies.get("linkedin_access_token");
+    const tempToken: string | undefined = Cookies.get('linkedin_access_token');
 
     if (tempToken) {
       setToken(tempToken);
@@ -21,7 +21,7 @@ const Page = () => {
   }, [dispatch]);
 
   const client_id =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID_PROD
       : process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
 

@@ -47,7 +47,7 @@ export const fetchUserCommitHistory = async (username: string, token: string, ye
     const repositories = result.user.repositories.edges;
     const commits = repositories.flatMap((repo: any) =>
       repo.node.defaultBranchRef?.target?.history.edges.map((commit: any) => ({
-        date: commit.node.committedDate.split("T")[0],
+        date: commit.node.committedDate.split('T')[0],
         count: 1,
         isPrivate: repo.node.isPrivate,
       })) || []

@@ -1,9 +1,9 @@
-"use client";
-import "antd/dist/reset.css";
-import { GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { featureFlag } from "./MyCustomLayout";
+'use client';
+import 'antd/dist/reset.css';
+import { GithubOutlined, LinkedinOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { featureFlag } from './MyCustomLayout';
 
 export default function Home() {
   const router = useRouter();
@@ -21,11 +21,11 @@ export default function Home() {
           <div className="flex space-x-8">
             <div
               className="flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 bg-white rounded-full shadow-lg cursor-pointer hover:shadow-2xl transition duration-300 ease-in-out"
-              onClick={() => router.push("/github")}
+              onClick={() => router.push('/github')}
             >
               <GithubOutlined
                 className="text-5xl sm:text-6xl"
-                style={{ color: "#333" }}
+                style={{ color: '#333' }}
               />
             </div>
             {/* {

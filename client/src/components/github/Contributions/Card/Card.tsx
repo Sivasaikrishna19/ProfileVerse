@@ -1,13 +1,13 @@
-import { ForkOutlined } from "@ant-design/icons";
-import { Tooltip, Card as AntdCard, Progress, ProgressProps } from "antd";
-import React from "react";
-import { analyzeCommitFrequency } from "../../RepoHealth/CommitFrequency";
-import { calculateRepoHealth } from "../../RepoHealth/RepoHealth";
+import { ForkOutlined } from '@ant-design/icons';
+import { Tooltip, Card as AntdCard, Progress, ProgressProps } from 'antd';
+import React from 'react';
+import { analyzeCommitFrequency } from '../../RepoHealth/CommitFrequency';
+import { calculateRepoHealth } from '../../RepoHealth/RepoHealth';
 
 const Card = ({ repo }: any) => {
-  const twoColors: ProgressProps["strokeColor"] = {
-    "0%": "#108ee9",
-    "100%": "#87d068",
+  const twoColors: ProgressProps['strokeColor'] = {
+    '0%': '#108ee9',
+    '100%': '#87d068',
   };
   return (
     <div>
@@ -19,13 +19,13 @@ const Card = ({ repo }: any) => {
                 <div className="flex items-center">
                   {repo.name && repo.name.length > 25 ? (
                     <Tooltip title={repo.name}>
-                      {repo.name.slice(0, 25) + "..."}
+                      {repo.name.slice(0, 25) + '...'}
                     </Tooltip>
                   ) : (
                     repo.name
                   )}
                   <div className="ml-1">
-                    {repo.isFork ? <ForkOutlined /> : ""}
+                    {repo.isFork ? <ForkOutlined /> : ''}
                   </div>
                 </div>
               </a>
@@ -45,10 +45,10 @@ const Card = ({ repo }: any) => {
           <p className="text-gray-600">
             {repo.description && repo.description.length > 100 ? (
               <Tooltip title={repo.description}>
-                {repo.description.slice(0, 100) + "..."}
+                {repo.description.slice(0, 100) + '...'}
               </Tooltip>
             ) : (
-              repo.description || "No description available."
+              repo.description || 'No description available.'
             )}
           </p>
         </div>
@@ -56,7 +56,7 @@ const Card = ({ repo }: any) => {
           <div className="mb-2 flex justify-between">
             <div>
               <span className="font-semibold">Language: </span>
-              {repo.primaryLanguage ? repo.primaryLanguage.name : "N/A"}
+              {repo.primaryLanguage ? repo.primaryLanguage.name : 'N/A'}
             </div>
             <div className="text-blue-500">
               <span className="font-semibold">Contributions: </span>

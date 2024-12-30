@@ -7,7 +7,7 @@ export const fetchUserData = async (username: string, token: string) => {
   try {
     const userData = await fetchUserMetaData(username, token);
     if(!userData) {
-      message.error('Oops! User Not Found :(')
+      message.error('Oops! User Not Found :(');
     }
     return userData;
   } catch (error) {

@@ -1,67 +1,67 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { Button, FloatButton, Spin, message } from "antd";
-import Search from "antd/es/input/Search";
-import { fetchRepositories, fetchUserData } from "@/utils/github/api";
-import ProfileSummary from "@/components/github/ProfileSummary/ProfileSummary";
-import { useDispatch } from "react-redux";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { Button, FloatButton, Spin, message } from 'antd';
+import Search from 'antd/es/input/Search';
+import { fetchRepositories, fetchUserData } from '@/utils/github/api';
+import ProfileSummary from '@/components/github/ProfileSummary/ProfileSummary';
+import { useDispatch } from 'react-redux';
 import {
   setProfileSummary,
   setRepositories,
-} from "@/store/slices/profileSummary";
-import LanguagesSummary from "@/components/github/LanguagesSummary/LanguagesSummary";
-import { setAccessToken } from "@/store/slices/authentication";
-import { IProfileSummary } from "@/interfaces/profileSummary.interface";
-import { fetchUserLanguages } from "@/graphql/queries/languages";
-import { IRepository } from "@/interfaces/repo.interface";
-import Contributions from "@/components/github/Contributions/Contributions";
+} from '@/store/slices/profileSummary';
+import LanguagesSummary from '@/components/github/LanguagesSummary/LanguagesSummary';
+import { setAccessToken } from '@/store/slices/authentication';
+import { IProfileSummary } from '@/interfaces/profileSummary.interface';
+import { fetchUserLanguages } from '@/graphql/queries/languages';
+import { IRepository } from '@/interfaces/repo.interface';
+import Contributions from '@/components/github/Contributions/Contributions';
 
 const Page = () => {
   const dispatch = useDispatch();
-  const [token, setToken] = useState<string | undefined>("");
-  const [username, setUsername] = useState<string | null>("");
+  const [token, setToken] = useState<string | undefined>('');
+  const [username, setUsername] = useState<string | null>('');
   const [userData, setUserData] = useState<IProfileSummary>();
   const [languages, setLanguages] = useState<any>({ Type: 10000 });
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const tempToken: string | undefined = Cookies.get("access_token");
+    const tempToken: string | undefined = Cookies.get('access_token');
     if (tempToken) {
       setToken(tempToken);
       dispatch(setAccessToken(tempToken));
     }
   }, [dispatch]);
   const significantLanguages = [
-    "JavaScript",
-    "TypeScript",
-    "Python",
-    "Java",
-    "C++",
-    "C#",
-    "PHP",
-    "Ruby",
-    "Go",
-    "Rust",
-    "Kotlin",
-    "Swift",
-    "Objective-C",
-    "Scala",
-    "Haskell",
-    "Shell",
-    "HTML",
-    "CSS",
-    "Dart",
-    "Perl",
-    "Lua",
-    "Elixir",
-    "Clojure",
-    "R",
-    "MATLAB",
+    'JavaScript',
+    'TypeScript',
+    'Python',
+    'Java',
+    'C++',
+    'C#',
+    'PHP',
+    'Ruby',
+    'Go',
+    'Rust',
+    'Kotlin',
+    'Swift',
+    'Objective-C',
+    'Scala',
+    'Haskell',
+    'Shell',
+    'HTML',
+    'CSS',
+    'Dart',
+    'Perl',
+    'Lua',
+    'Elixir',
+    'Clojure',
+    'R',
+    'MATLAB',
   ];
 
   const onSearch = async () => {
-    if (username === "" || !username) {
+    if (username === '' || !username) {
       dispatch(setProfileSummary({} as IProfileSummary));
       dispatch(setRepositories([]));
       setUserData({} as IProfileSummary);
@@ -92,7 +92,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    if (username === "" || !username) {
+    if (username === '' || !username) {
       dispatch(setProfileSummary({} as IProfileSummary));
       dispatch(setRepositories([]));
       setUserData({} as IProfileSummary);
@@ -100,12 +100,12 @@ const Page = () => {
   }, [username, dispatch]);
 
   const client_id =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === 'production'
       ? process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_PROD
       : process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID_DEV;
 
   const redirect_uri =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === 'production'
       ? `${process.env.NEXT_PUBLIC_PROD_URL}/api/github/callback`
       : `${process.env.NEXT_PUBLIC_DEV_URL}api/github/callback`;
 
@@ -171,7 +171,7 @@ const Page = () => {
       )}
       <FloatButton.BackTop
         visibilityHeight={10}
-        style={{ right: "90px" }}
+        style={{ right: '90px' }}
         className="max-md:right-10"
       />
     </div>

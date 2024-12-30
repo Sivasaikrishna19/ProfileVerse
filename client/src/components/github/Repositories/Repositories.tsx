@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { UserState } from "@/store/slices/profileSummary";
-import { Badge, Card, Tooltip } from "antd";
-import { IRepository } from "@/interfaces/repo.interface";
-import moment from "moment";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { UserState } from '@/store/slices/profileSummary';
+import { Badge, Card, Tooltip } from 'antd';
+import { IRepository } from '@/interfaces/repo.interface';
+import moment from 'moment';
 
 const Repositories = () => {
   const { repos }: any = useSelector(
@@ -16,12 +16,12 @@ const Repositories = () => {
     const lastUpdated = moment(updatedAt);
     const now = moment();
 
-    if (now.diff(lastUpdated, "months") <= 1) {
-      return { status: "Recently Active", color: "green" };
-    } else if (now.diff(lastUpdated, "months") <= 6) {
-      return { status: "Moderately Active", color: "orange" };
+    if (now.diff(lastUpdated, 'months') <= 1) {
+      return { status: 'Recently Active', color: 'green' };
+    } else if (now.diff(lastUpdated, 'months') <= 6) {
+      return { status: 'Moderately Active', color: 'orange' };
     } else {
-      return { status: "Inactive", color: "red" };
+      return { status: 'Inactive', color: 'red' };
     }
   };
 
@@ -29,7 +29,7 @@ const Repositories = () => {
     if (text.length <= maxLength) {
       return text;
     }
-    return text.substring(0, maxLength) + "...";
+    return text.substring(0, maxLength) + '...';
   };
 
   return (
@@ -61,10 +61,10 @@ const Repositories = () => {
                   <p className="text-gray-600">
                     {repo.description && repo.description.length > 100 ? (
                       <Tooltip title={repo.description}>
-                        {repo.description.slice(0, 100) + "..."}
+                        {repo.description.slice(0, 100) + '...'}
                       </Tooltip>
                     ) : (
-                      repo.description || "No description available."
+                      repo.description || 'No description available.'
                     )}
                   </p>
                 </div>
@@ -85,7 +85,7 @@ const Repositories = () => {
                   </div>
                   <div className="mt-2">
                     <span className="font-semibold">Language: </span>
-                    {repo.primaryLanguage ? repo.primaryLanguage.name : "N/A"}
+                    {repo.primaryLanguage ? repo.primaryLanguage.name : 'N/A'}
                   </div>
                   <div className="flex justify-between mt-2">
                     <Tooltip

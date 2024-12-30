@@ -113,7 +113,7 @@ export const fetchAllRepositories = async (username: string, token: string) => {
         })) || [],
         totalCount: edge.node.contributions?.target?.history?.totalCount || 0,
       },
-      readme: edge.node.object?.text || "No README available",
+      readme: edge.node.object?.text || 'No README available',
     }));
     repositories = [...repositories, ...fetchedRepos];
     hasNextPage = result.user.repositories.pageInfo.hasNextPage;
@@ -121,7 +121,7 @@ export const fetchAllRepositories = async (username: string, token: string) => {
   }
 
   // Fetch all commits for each repository
-  for (let repo of repositories) {
+  for (const repo of repositories) {
     let allCommits: any = [];
     let commitsHasNextPage = true;
     let commitsEndCursor = null;
@@ -141,7 +141,7 @@ export const fetchAllRepositories = async (username: string, token: string) => {
 
     // Group commits by date and count the number of commits per date
     const commitsGroupedByDate = allCommits.reduce((acc: any, commit: any) => {
-      const date = commit.committedDate.split("T")[0];
+      const date = commit.committedDate.split('T')[0];
       if (!acc[date]) {
         acc[date] = 0;
       }

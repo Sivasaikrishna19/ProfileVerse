@@ -1,22 +1,24 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { UserState } from "@/store/slices/profileSummary";
-import { fetchRepositories } from "@/utils/github/api";
-import { Statistic, StatisticProps, TabsProps, Tabs, Select, Spin } from "antd";
-import Cookies from "js-cookie";
-import CountUp from "react-countup";
-import OwnContributions from "./Tabs/OwnContributions";
-import OpenSourceContributions from "./Tabs/OpenSourceContributions";
-import CommitHeatmap from "../CommitHeatmap/CommitHeatmap";
-import { calculateRepoHealth } from "../RepoHealth/RepoHealth";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { UserState } from '@/store/slices/profileSummary';
+import { fetchRepositories } from '@/utils/github/api';
+import { Statistic, StatisticProps, TabsProps, Tabs, Select, Spin } from 'antd';
+import Cookies from 'js-cookie';
+import CountUp from 'react-countup';
+import OwnContributions from './Tabs/OwnContributions';
+import OpenSourceContributions from './Tabs/OpenSourceContributions';
+import CommitHeatmap from '../CommitHeatmap/CommitHeatmap';
+import { calculateRepoHealth } from '../RepoHealth/RepoHealth';
 
 const Contributions = () => {
+  const unusedVar = 42; // Should show a warning
+
   const { profileSummary }: any = useSelector(
     (state: UserState) => state.profileSummary
   );
-  const accessToken: string | undefined = Cookies.get("access_token");
+  const accessToken: string | undefined = Cookies.get('access_token');
   const [ownReposContributions, setOwnReposContributions] = useState<any[]>([]);
   const [otherReposContributions, setOtherReposContributions] = useState<any[]>(
     []
@@ -29,10 +31,10 @@ const Contributions = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [languageOptions, setLanguageOptions] = useState<any[]>([]);
   const [filteredRepos, setFilteredRepos] = useState<any[]>([]);
-  const [sortCriteria, setSortCriteria] = useState<string>("lastUpdated");
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
+  const [sortCriteria, setSortCriteria] = useState<string>('lastUpdated');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
 
-  const formatter: StatisticProps["formatter"] = (value) => (
+  const formatter: StatisticProps['formatter'] = (value) => (
     <CountUp end={value as number} separator="," />
   );
 
@@ -48,7 +50,7 @@ const Contributions = () => {
   const handleLanguageChange = (value: string) => {
     setSelectedLanguage(value);
     const repos =
-      value === "all"
+      value === 'all'
         ? [...ownReposContributions, ...otherReposContributions]
         : [...ownReposContributions, ...otherReposContributions].filter(
             (repo) => repo.primaryLanguage?.name.toLowerCase() === value
@@ -59,25 +61,25 @@ const Contributions = () => {
   const sortRepositories = (repos: any[], criteria: string) => {
     let sortedRepos;
     switch (criteria) {
-      case "name":
+      case 'name':
         sortedRepos = repos.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case "contributions":
+      case 'contributions':
         sortedRepos = repos.sort(
           (a, b) => b.contributions?.totalCount - a.contributions?.totalCount
         );
         break;
-      case "stars":
+      case 'stars':
         sortedRepos = repos.sort((a, b) => b.stargazerCount - a.stargazerCount);
         break;
-      case "repoHealth":
+      case 'repoHealth':
         sortedRepos = repos.sort(
           (a, b) =>
             calculateRepoHealth(b).totalHealthScore -
             calculateRepoHealth(a).totalHealthScore
         );
         break;
-      case "lastUpdated":
+      case 'lastUpdated':
       default:
         sortedRepos = repos.sort(
           (a, b) =>
@@ -118,7 +120,7 @@ const Contributions = () => {
               label: lang,
             }));
           setLanguageOptions([
-            { value: "all", label: "All" },
+            { value: 'all', label: 'All' },
             ...languageOptions,
           ]);
 
@@ -148,18 +150,18 @@ const Contributions = () => {
           setFilteredRepos(allRepos);
           sortRepositories(allRepos, sortCriteria);
         } catch (error) {
-          console.error("Error fetching contributions:", error);
+          console.error('Error fetching contributions:', error);
           setLoading(false);
         }
       }
     };
 
     fetchData();
-  }, [profileSummary]);
+  }, [profileSummary, accessToken, sortCriteria]);
 
-  const items: TabsProps["items"] = [
+  const items: TabsProps['items'] = [
     {
-      key: "1",
+      key: '1',
       label: (
         <div className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px]">
           Own Contributions
@@ -175,7 +177,7 @@ const Contributions = () => {
       ),
     },
     {
-      key: "2",
+      key: '2',
       label: (
         <div className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px]">
           Open Source Contributions
@@ -255,14 +257,14 @@ const Contributions = () => {
             </label>
             <Select
               defaultValue="lastUpdated"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               onChange={handleSortChange}
               options={[
-                { value: "lastUpdated", label: "Last updated" },
-                { value: "contributions", label: "Contributions" },
-                { value: "name", label: "Name" },
-                { value: "stars", label: "Stars" },
-                { value: "repoHealth", label: "Repo Health" },
+                { value: 'lastUpdated', label: 'Last updated' },
+                { value: 'contributions', label: 'Contributions' },
+                { value: 'name', label: 'Name' },
+                { value: 'stars', label: 'Stars' },
+                { value: 'repoHealth', label: 'Repo Health' },
               ]}
             />
           </div>
@@ -272,7 +274,7 @@ const Contributions = () => {
             </label>
             <Select
               defaultValue="all"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               onChange={handleLanguageChange}
               options={languageOptions}
             />
