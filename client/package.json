@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "start": "next start"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
