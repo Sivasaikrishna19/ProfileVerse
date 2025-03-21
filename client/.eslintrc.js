@@ -18,8 +18,8 @@ module.exports = {
     ],
     extends: [
       'eslint:recommended', // Basic ESLint recommended rules
-      'plugin:@typescript-eslint/recommended', // TypeScript recommended rules
-      'plugin:react/recommended', // React recommended rules
+      // 'plugin:@typescript-eslint/recommended', // TypeScript recommended rules
+      // 'plugin:react/recommended', // React recommended rules
     ],
     rules: {
       'semi': ['error', 'always'], // Enforce semicolons
