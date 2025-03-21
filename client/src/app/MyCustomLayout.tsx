@@ -1,19 +1,19 @@
-'use client';
+"use client";
 import {
   GithubOutlined,
   LinkedinOutlined,
   PlusSquareOutlined,
-} from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-import React from 'react';
-import 'antd/dist/reset.css';
+} from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
+import React from "react";
+import "antd/dist/reset.css";
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import useSelectedKey from '@/hooks/useSelectedKey';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import useSelectedKey from "@/hooks/useSelectedKey";
 
 const { Content, Footer, Sider } = Layout;
-export const featureFlag = process.env.NODE_ENV === 'production' ? false : true;
+export const featureFlag = process.env.NODE_ENV === "production" ? false : true;
 
 export default function MyCustomLayout({
   children,
@@ -28,7 +28,7 @@ export default function MyCustomLayout({
   const items = featureFlag
     ? [
         {
-          key: '1',
+          key: "1",
           icon: <GithubOutlined />,
           label: <Link href="/github">GitInsight</Link>,
         },
@@ -40,7 +40,7 @@ export default function MyCustomLayout({
       ]
     : [
         {
-          key: '1',
+          key: "1",
           icon: <GithubOutlined />,
           label: <Link href="/github">GitInsight</Link>,
         },
@@ -56,17 +56,17 @@ export default function MyCustomLayout({
   const selectedKey = useSelectedKey();
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider breakpoint="lg" collapsedWidth="0">
         <div
           className="flex items-center justify-center py-4 text-[24px] text-white cursor-pointer"
           onClick={() => {
-            navigateToPage('/');
+            navigateToPage("/");
           }}
         >
           ProfileVerse
         </div>
-        <div className="w-full p-4 flex items-center justify-center">
+        {/* <div className="w-full p-4 flex items-center justify-center">
           <Button
             className="w-full"
             onClick={() => {
@@ -76,7 +76,7 @@ export default function MyCustomLayout({
             <PlusSquareOutlined />
             New Bactch
           </Button>
-        </div>
+        </div> */}
 
         <Menu
           theme="dark"
@@ -86,14 +86,14 @@ export default function MyCustomLayout({
         />
       </Sider>
       <Layout>
-        <Content style={{ margin: '24px 16px 0', overflow: 'auto' }}>
+        <Content style={{ margin: "24px 16px 0", overflow: "auto" }}>
           <div
             style={{
               padding: 24,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
-              minHeight: 'calc(100vh - 88px)', // Adjust the height to ensure footer visibility
-              overflow: 'auto',
+              minHeight: "calc(100vh - 88px)", // Adjust the height to ensure footer visibility
+              overflow: "auto",
             }}
           >
             {children}
@@ -101,27 +101,27 @@ export default function MyCustomLayout({
         </Content>
         <Footer
           style={{
-            textAlign: 'center',
-            backgroundColor: '#f0f2f5',
-            padding: '20px 0',
+            textAlign: "center",
+            backgroundColor: "#f0f2f5",
+            padding: "20px 0",
           }}
         >
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <div>
               Created by ©<b>NSSK</b>
             </div>
-            <div style={{ marginLeft: '20px', display: 'flex', gap: '20px' }}>
+            <div style={{ marginLeft: "20px", display: "flex", gap: "20px" }}>
               <a
                 href="https://github.com/sivasaikrishna19"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ fontSize: '20px' }}
+                style={{ fontSize: "20px" }}
               >
                 <GithubOutlined />
               </a>
@@ -129,7 +129,7 @@ export default function MyCustomLayout({
                 href="https://linkedin.com/in/nssk"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ fontSize: '20px' }}
+                style={{ fontSize: "20px" }}
               >
                 <LinkedinOutlined />
               </a>
