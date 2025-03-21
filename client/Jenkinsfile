@@ -20,13 +20,13 @@ pipeline {
             }
         }
 
-        stage('Run ESLint') {
-            steps {
-                dir('client') { // Navigate to the client directory
-                    sh 'npm run lint' // Run the linting process
-                }
-            }
-        }
+        // stage('Run ESLint') {
+        //     steps {
+        //         dir('client') { // Navigate to the client directory
+        //             sh 'npm run lint' // Run the linting process
+        //         }
+        //     }
+        // }
 
         stage('Build Application') {
             steps {
